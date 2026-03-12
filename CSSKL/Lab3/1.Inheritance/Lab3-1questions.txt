@@ -1,0 +1,6 @@
+What do you observe?
+before the end happens, all the deconstructors are called as it leaves the nested block.
+the stack trace is created when the block is open, and is erased once it ends.
+
+How are the constructors and destructors called? in which order?
+The constructors are called first when they are created, and the deconstructors are called at the end of the block. 

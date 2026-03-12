@@ -1,0 +1,11 @@
+Create a C++ program to print out the max and min value of the following primitive types: int, unsigned int, long, double and float.
+What do you find from this program?
+Try other methods on different primitive types per your interest.
+- It prints out the the maximum the data type could be. 
+Like the max negative or positive int,
+the maximum value of an unsigned int, etc.
+
+Ex 4 Q6:
+Please try to use both operator[] and insert method in the following two steps
+Try to update a pair’s value given a key that does not exist in the map. Any runtime errors?
+- No, it seems that it adds the a new key with the assigned string and int value.

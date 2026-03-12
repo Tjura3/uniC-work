@@ -1,0 +1,26 @@
+Psudocode for an alogrithem in postfix notation
+
+FUNCTION int evaluate string&
+create an int stack
+get expression from user
+    for each charachter in expression do
+        if the char is a didget, add to stack
+        else if expression,
+            pop two didgets and preform operator using operator function that returns int
+            Push int to stack
+        else print invalid expression and exit
+return stack pop
+END FUNCTION
+
+FUNCTION int evaluate int int char
+switch case
+    if operator, do expression  {has a case for every operator}
+return expression awnser
+END FUNCTION
+
+FUNCITON main
+Get expression from user
+clear white space in expression
+call evaluate pass in expression
+print result of evaluate
+END FUNCTION

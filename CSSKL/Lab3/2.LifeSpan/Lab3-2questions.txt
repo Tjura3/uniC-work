@@ -1,0 +1,13 @@
+- Try putting a SuperInt on the right hand side of an assignment statement using theValue(). Does it work? Why?
+it works because it just assigns the value of SuperInt to the variable.
+
+Take away: nothing too interesting, we can return the value of an instance variable. But, in this case we are returning the reference to the variable! 
+
+
+
+- Try putting a SuperInt on the left hand side of an assignment statement using theValue(). Does it work? Why?
+It does not work because its attempting to assign a constant value a new value, and it cant do that cause the value was already defined and is constant.
+
+Take away: First, returning a const type means the function cannot be a l-value. 
+Second, if the the return type is not of const , then, if the receiver of this function is an integer reference, 
+then, the receiver can change this instance variable! Ask me if you don't understand what I mean.

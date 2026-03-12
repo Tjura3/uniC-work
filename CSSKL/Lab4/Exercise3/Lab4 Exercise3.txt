@@ -1,0 +1,28 @@
+Question: Look at the code in IteratorTest.cpp. What do you think it does?
+Compile the code (do you need to do anything "unusual" to get it to compile?) and run it.
+Does it do what you think it would?
+- it makes a new square container, uses a while loop to fill the square container with values,
+then it prints the values in the square container using the itorator.
+it breaks because the itorator doesnt have the right operator defined.
+
+
+Question: Why do the iterator increment operators return an iterator?
+How do the two increment operators differ?
+Is the iterator they return allocated dynamically, auto, or something else?
+- its a square containter iterator using a method declared as squarecontainer itorator. its scoping..
+it creates a copy of itself on the stack, and it points th the container. when you return, you return the iterator object.
+basically it just increases the size of the iterator. 
+(at this point this is kinda becoming notes for me.)
+Diffrence: one returns the value, while another returns the itorator object
+
+
+
+Interactive Coding and Question: Change SquareContainer::iterator::operator*() so that it is a const method.
+What is this supposed to mean? When you try to compile and run the program, what happens?
+Does this appear to be consistent with the declaration of that operator as const? Why or why not?
+In your opinion, should that operator be declared const?
+- it changes the method to constant so the method doesn't change. 
+if you try and compile it without changing it breaks because the header file is diffrent from the method in the .cpp file.
+Another thing to note, is that when it has const at the end of the method, it makes it so it can only be called by objects declared as const.
+when you add the const keyword to a method the pointer will become a pointer to const object, and you cannot change any member data from what I know
+so when you add const there it cant edit the data in the itorator I think.

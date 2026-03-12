@@ -1,0 +1,13 @@
+1.1 -  Look at the code; do you think that MyClass::operator=() is doing a deep or shallow copy?
+    Deep copy because it assigns its own dynamic memory rather then refering to the other's memory.
+
+1.2 - Do you notice any warning posted by the compiler? Is there a memory leak issue? How can you fix it?
+    there is a memory leak issue where it loses 4 bytes. 4 bytes is the size of an int, so it just needs to delete ip to clear the memory leak.
+
+1.3 -  Is MyClass::setIp() implemented correctly? What exactly does it do?
+    yes it works, it de-refrences the pointer and sets the value. because its dereffrenced, it accesses the value in memory
+
+1.4 - Derive a new subclass of MyClass, name it "MySubClass" and define a private "int" type data member named "subClassData" 
+in this new class. What do you need to do is to ensure that the correct copy constructor and assignment operators are called. 
+Verify that your new class works correctly.
+    Done at the bottom of MyClass.cpp

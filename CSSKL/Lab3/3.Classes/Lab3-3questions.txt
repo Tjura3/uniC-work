@@ -1,0 +1,7 @@
+- Is there a problem with the fact that SquareContainer.h defines two classes?
+No, based on what it looks like, it seems like its there to be called when there is an error in the system that causes it to break in code.
+
+
+- Does the Square class need an overloaded assignment operator?
+It doesnt need it, but its overall nice to have. it makes dealing with other squares in the code that uses it a bit easier.
+(Putting this here in case it's too hard to find it in code.)
