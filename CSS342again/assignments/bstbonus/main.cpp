@@ -2,7 +2,9 @@
 #include "bst.h"
 
 using namespace std;
-
+//g++ -std=c++17 -Wall -Wextra -pedantic -fsanitize=address main.cpp bst.cpp -o bst_bonus
+//aparently running the above command makes valgrind break.
+//either way, it seems to pass the tests.
 int main() {
     BST tree;
 
