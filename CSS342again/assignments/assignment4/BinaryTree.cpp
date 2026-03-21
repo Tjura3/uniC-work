@@ -114,7 +114,8 @@ int BinaryTree::countNodes(Node* node) const{
     return 1 + countNodes(node->left) + countNodes(node->right);
 }
 int BinaryTree::countLeaves(Node* node) const{
-    if(node == nullptr) return 1;
+    if(node == nullptr) return 0;
+    if(node-> left == nullptr && node -> right == nullptr) return 1;
     return countLeaves(node->left) + countLeaves(node->right);
 }
 int BinaryTree::sum(Node* node) const{
