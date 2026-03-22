@@ -52,12 +52,12 @@ void printVector(const vector<int>& nums) {
 // ------------------------------------------------------------
 void partitionOddEven(vector<int>& nums) {
     // TODO:
-    int i = 0;
-    while((nums[i] % 2) == 0){
-        i++
-    }
-    while((nums[i] % 2) == 1){
-        if(nums)
+    int i = -1;
+    for(int j = 0; j < nums.size(); j++){
+        if((nums[j] % 2) != 1){
+            i++;
+            swapValues(nums[i], nums[j]);
+        }
     }
 
 }
@@ -144,7 +144,21 @@ int quickSelectHelper(vector<int>& nums, int left, int right, int targetIndex) {
 
     // TODO:
     // Implement the recursive quickselect logic
-    return 0;
+    
+    if (left == right) {
+        return nums[left];
+    }
+    int pivotIndex = partition(nums, left, right);
+    
+    if (pivotIndex == targetIndex) {
+        return nums[pivotIndex];
+    } else if (targetIndex < pivotIndex) {
+        //only left recursion
+        return quickSelectHelper(nums, left, pivotIndex - 1, targetIndex);
+    } else {
+        //only right recursion
+        return quickSelectHelper(nums, pivotIndex + 1, right, targetIndex);
+    }
 
 }
 
@@ -171,7 +185,7 @@ int quickSelect(vector<int>& nums, int k) {
 
     // TODO:
     // Finish the quickSelect function
-    return 0;
+    return quickSelectHelper(nums, 0, nums.size()-1, k-1);
 }
 
 
@@ -206,7 +220,7 @@ int main() {
     cout << endl;
 
     vector<int> nums2 = {9, 4, 7, 1, 3, 6};
-    int k = 3;
+    int k = 4;
 
     cout << "Vector for quickSelect:" << endl;
     printVector(nums2);
@@ -215,7 +229,7 @@ int main() {
     int answer = quickSelect(nums2, k);
 
     cout << k << "rd smallest element = " << answer << endl;
-    cout << "Expected answer = 4" << endl;
+    cout << "Expected answer = 6" << endl;
 
     cout << endl;
 

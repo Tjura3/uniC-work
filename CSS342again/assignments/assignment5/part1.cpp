@@ -528,7 +528,7 @@ void runQuickExperiment(
 int main() {
     srand(42);
 
-    int size = 10000;
+    int size = 100000;
 
     vector<int> randomData = makeRandomVector(size);
     vector<int> sortedData = makeSortedVector(size);
