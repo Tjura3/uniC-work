@@ -7,7 +7,7 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g", 
-                "*.cpp", //this used to be not work, until I did ${file} now only run debug (f5) works
+                "${workspaceFolder}/*.cpp", //this used to be not work, until I did ${file} now only run debug (f5) works
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
