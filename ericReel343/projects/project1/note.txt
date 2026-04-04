@@ -1,0 +1,46 @@
+The Mission
+J.G. Ballard's novel High Rise (now a major motion picture), explores the disintegration of social order in a self contained high-rise apartment block.  As the residents of the building descend into chaos, isolation and madness, increasingly disturbing and primitive behaviors manifest. We will explore this dark world in the context of the Josephus Problem, using the circular linked list.
+
+The Details
+Imagine a linked list where each node represents a resident in a high-rise building.  Starting from the first resident, every k-th resident (where k is a constant, e.g., every second resident) is selected to be eaten by their pet cat.  After each elimination, the pointer to the next resident is adjusted to maintain the linked structure.  This simulation is run until there is only one resident left.
+
+Example
+CircularLinkedList<string> residents({"Laing", "Wilder",  "Frobisher"})
+
+while(residents.size() > 1) {
+    string eaten = residents.removeNext(1);  // k == 1
+    cout << "Eaten: " << eaten << "\n";
+}
+
+string winner = residents.getCurrent();
+cout << "The winner is " << winner << "!\n";
+Expected output:
+
+Eaten: Wilder
+Eaten: Laing
+The winner is Frobisher!
+
+Explanation:
+
+In round 1, we start at Liang and move to Wilder.  After Wilder is eaten we move the starting point to Frobisher.
+
+In round 2, we start at Frobisher and move to Laing.  After Liang is eaten, only Frobisher is left.
+
+More Details
+Implement your own templated class for the circular linked list.  You can define whatever methods you like, but you need to have sufficient functionality to satisfy the scenario outlined above. 
+You may NOT use the std::list class.
+
+In addition, implement test cases that verify your code works as expected.  Test cases should automatically determines if the test succeeds or fails.
+
+Please run valgrind on your program and ensure that there are no memory leaks.  Include the valgrind output when submitting the project.
+
+Ensure that your code is written using the class style guidelines and compiled using the specified warning flags.
+
+Turning Your Work In
+Zip your project files up and upload to Canvas.  Your upload file should be named <your_uw_net_id>_highrise.zip.  For example,  ericre_highrise.zip
+
+Scoring
+This project is worth 20 points.
+
+
+removeNext cant be zero

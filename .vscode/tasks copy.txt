@@ -1,17 +1,13 @@
 {
     "tasks": [
-        { //there was an edit for eric reel's class for 343
+        {
             "type": "cppbuild",
-            "label": "C/C++: gcc.exe build active file",
+            "label": "C/C++: g++ build active file",
             "command": "/usr/bin/g++",
             "args": [
                 "-fdiagnostics-color=always",
-                "-g",
-                "-Wall",
-                "-Wextra",
-                "-Wno-sign-compare",
-                "-Werror",
-                "${workspaceFolder}/*.cpp",
+                "-g", 
+                "${workspaceFolder}/*.cpp", //this used to be not work, until I did ${file} now only run debug (f5) works
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
