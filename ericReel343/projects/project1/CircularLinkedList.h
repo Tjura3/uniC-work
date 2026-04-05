@@ -15,8 +15,23 @@ class CircularLinkedList {
 
     public:
     CircularLinkedList() : curr(nullptr), size(0) {}
-    CircularLinkedList(initializer_list<T> inilist) : curr(nullptr), size(0){
-        
+    CircularLinkedList(initializer_list<T> inlist) : curr(nullptr), size(0){
+        for (const auto& listval : inlist) {
+            add(listval);
+        }
+    }
+    void add(T val){
+        Node* newNode = new Node(val);
+        if(curr == nullptr){
+            curr = newNode;
+            newNode->next = curr;
+        }else{
+            Node* temp = curr;
+            while(temp->next != curr){
+                temp = temp->next;
+                
+            }
+        }
     }
     
     

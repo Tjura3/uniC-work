@@ -50,5 +50,6 @@
         "complex": "cpp",
         "sstream": "cpp",
         "chrono": "cpp"
-    }
+    },
+    "C_Cpp.errorSquiggles": "enabled"
 }
