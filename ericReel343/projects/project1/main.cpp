@@ -84,7 +84,7 @@ void runTests() {
     //goto empty
     {
         CircularLinkedList<int> singleton({99});
-        int val = singleton.removeNext(1); // Move 1 (back to 99), remove it.
+        int val = singleton.removeNext(1); //basically just make sure this circles back
         report(val == 99 && singleton.size() == 0, "Go To Empy");
     }
 
