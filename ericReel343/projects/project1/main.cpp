@@ -11,5 +11,6 @@ int main(){
 
     string winner = residents.getCurrent();
     cout << "The winner is " << winner << "!\n";
-    return 0
+    // cout << "worked"<< endl;
+    return 0;
 }

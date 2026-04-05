@@ -4,11 +4,12 @@
 using namespace std;
 template <typename T>
 class CircularLinkedList {
+    //private and node struct
     private:
-    struct Node(){
+    struct Node{
         T data;
         Node* next;
-        Node(T value) : data(val), next(nullptr){}
+        Node(T val) : data(val), next(nullptr){}
     };
     Node* curr;
     int size;
@@ -35,6 +36,20 @@ class CircularLinkedList {
             newnode->next = curr;
         }
         size++;
+    }
+    T removeNext(int place){ 
+        if(size == 0) return;
+        if(place == 0){
+            //unfortunately 
+            Node* temp = curr;
+            while(temp->next != curr){
+                temp = temp->next;
+            }
+            //at this point temp is the node before curr so set its next to node after curr, then delete curr, and update curr.
+            temp->next = curr->next;
+            delete curr;
+            temp->next = curr;
+        }
     }
     
     
