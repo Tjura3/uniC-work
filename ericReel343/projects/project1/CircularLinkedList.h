@@ -21,18 +21,22 @@ class CircularLinkedList {
         }
     }
     void add(T val){
-        Node* newNode = new Node(val);
+        Node* newnode = new Node(val);
         if(curr == nullptr){
-            curr = newNode;
-            newNode->next = curr;
+            curr = newnode;
+            newnode->next = curr;
         }else{
             Node* temp = curr;
             while(temp->next != curr){
                 temp = temp->next;
-                
+
             }
+            temp->next = newnode;
+            newnode->next = curr;
         }
+        size++;
     }
+    
     
     
 };
