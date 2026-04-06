@@ -53,6 +53,11 @@ void runTests() {
             cout << "[FAIL] " << name << endl;
         }
     };
+    //write a test on adding 5, then removing a specific one.
+    //write a test to get the size.
+    //write a test to get the current
+    //bounds check
+    //empty remove + size check
 
     // --- TEST 1: The "Residents" Scenario ---
     {

@@ -102,7 +102,7 @@ class CircularLinkedList {
         Node* temp = curr;
         cout << "[Curr: " << curr->data << "]\n";
         
-        //do whiles are built for this
+        //rare do while appearance
         do {
             cout << "[" << temp->data << "]" << " -> ";
             temp = temp->next;
