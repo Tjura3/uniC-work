@@ -30,7 +30,7 @@ public:
 
     void mirror();
     //
-    //void levelOrder();
+    void levelOrder();
 private:
     Node* root_;
 
@@ -47,7 +47,7 @@ private:
     void mirror(Node* node);
     void destroy(Node* node);
     //
-    //void levelOrder(Node* root);
+    void levelOrder(Node* root);
 };
 
 #endif

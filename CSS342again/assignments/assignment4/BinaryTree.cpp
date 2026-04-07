@@ -60,7 +60,7 @@ void BinaryTree::preOrderIterative() const{ //preorder traversal using a stack a
 void BinaryTree::mirror(){
     mirror(root_);
 }
-/* //If you are wondering what this is, I pulled this online from geeks for geeks to aid in testing, it just visualised the tree
+//If you are wondering what this is, I pulled this online from geeks for geeks to aid in testing, it just visualised the tree
 //also this creates a bunch of leaks and I was only using it temporarily so I'm just not gonna bother fixing it because it's not even in the h file that will be used so it will break anyways.
 void BinaryTree::levelOrder(){
     levelOrder(root_);
@@ -101,7 +101,7 @@ void BinaryTree::levelOrder(Node* root) {
         else queue.push({node->right, lvl + 1});
     }
 }
-*/
+
 
 
 int BinaryTree::height(Node* node) const{
