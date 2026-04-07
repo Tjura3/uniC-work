@@ -59,16 +59,19 @@ void runTests() {
     //bounds check
     //empty remove + size check
 
-    // --- TEST 1: The "Residents" Scenario ---
+    // Origional scenario
     {
         CircularLinkedList<string> residents({"Laing", "Wilder", "Frobisher"});
-        vector<string> eaten;
+        string wild;
+        string lai;
         while(residents.size() > 1) {
-            eaten.push_back(residents.removeNext(1));
+            string temp = residents.removeNext(1);
+            if(wild == "") wild = temp;
+            else lai = temp;
         }
-        bool match = (eaten.size() == 2 && eaten[0] == "Wilder" && eaten[1] == "Laing");
-        bool winnerMatch = (residents.getCurrent() == "Frobisher");
-        report(match && winnerMatch, "Original Resident Scenario");
+        bool match = (wild == "Wilder" && lai == "Laing");
+        bool winner = (residents.getCurrent() == "Frobisher");
+        report(match && winner, "Original Scenario");
     }
 
     // --- TEST 2: Removing with k=0 (Current node) ---
