@@ -54,12 +54,10 @@ void runTests() {
         }
     };
     //write a test on adding 5, then removing a specific one.
-    //write a test to get the size.
-    //write a test to get the current
     //bounds check
     //empty remove + size check
 
-    // Origional scenario
+    //Example
     {
         CircularLinkedList<string> residents({"Laing", "Wilder", "Frobisher"});
         string wild;
@@ -71,29 +69,29 @@ void runTests() {
         }
         bool match = (wild == "Wilder" && lai == "Laing");
         bool winner = (residents.getCurrent() == "Frobisher");
-        report(match && winner, "Original Scenario");
+        report(match && winner, "Example");
     }
 
-    // --- TEST 2: Removing with k=0 (Current node) ---
+    //Removal check, should remove curr, and it should be 20.
     {
         CircularLinkedList<int> nums({10, 20, 30});
         int removed = nums.removeNext(0); // Should remove 10 (curr)
-        report(removed == 10 && nums.getCurrent() == 20 && nums.size() == 2, "RemoveNext(0) Logic");
+        report(removed == 10 && nums.getCurrent() == 20 && nums.size() == 2, "Removal check");
     }
 
-    // --- TEST 3: Large k (Wrapping multiple times) ---
+    //wrap around to B
     {
         CircularLinkedList<string> chars({"A", "B", "C"});
         // k=4: Move from A -> B -> C -> A -> B. Victim is B.
-        string victim = chars.removeNext(4);
-        report(victim == "B" && chars.getCurrent() == "C", "Large k Wrapping");
+        string kill = chars.removeNext(4);
+        report(kill == "B" && chars.getCurrent() == "C", "Wrap removing B");
     }
 
     //goto empty
     {
         CircularLinkedList<int> singleton({99});
-        int val = singleton.removeNext(1); //basically just make sure this circles back
-        report(val == 99 && singleton.size() == 0, "Go To Empy");
+        int val = singleton.removeNext(99); //basically just make sure this circles back
+        report(val == 99 && singleton.size() == 0, "Empty after many loops");
     }
 
     //Bounds check
@@ -102,6 +100,23 @@ void runTests() {
         int val = nums.removeNext(-5); 
         report(val == 1 && nums.size() == 1, "If this doesn't say error above, it failed");
     }
+    
+    //size is 12
+    {
+        CircularLinkedList<int> intcircle({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13});
+        int val = intcircle.size();
+        report(val == 12, "Size is 12");
+    }
+
+    //empty remove
+    {
+        CircularLinkedList<int> emptycircle({});
+        emptycircle.removeNext(1);
+        emptycircle.removeNext(20);
+        int val = emptycircle.size();
+        report(val == 0, "Empty removal");
+    }
+
 
     
     cout << "Results: " << passed << " / " << total << " passed." << endl;
