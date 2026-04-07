@@ -7,7 +7,10 @@ void runTests();
 
 
 int main(){
-    
+    /**
+     * In main, I have two tests I ran without proper test cases.
+     * Afterwards, I run a proper system of test cases below.
+     */
     //Testing the first scenario
     CircularLinkedList<string> residents({"Laing", "Wilder",  "Frobisher"});
     while(residents.size() > 1) {
@@ -16,7 +19,7 @@ int main(){
         cout << "Eaten: " << eaten << "\n";
     }
     string winner = residents.getCurrent();
-    cout << "The winner is " << winner << "!\n";
+    cout << "The winner is " << winner << "!\n\n";
 
 
     //One more test here to make sure the code runs right
@@ -29,7 +32,7 @@ int main(){
     int success = numbers.getCurrent();
     cout << "The winner is " << success << "!\n";
 
-    cout << "\n\nProper test time _________________________________________" << endl; // I know its proper to do endl but I feel like using \n at the end of a string is just more efficient, im not sure though.
+    cout << "\nProper test time _________________________________________" << endl; // I know its proper to do endl but I feel like using \n at the end of a string is just more efficient, im not sure though.
     //writing proper tests now
     runTests();
 
@@ -54,8 +57,6 @@ void runTests() {
         }
     };
     //write a test on adding 5, then removing a specific one.
-    //bounds check
-    //empty remove + size check
 
     //Example
     {
@@ -103,7 +104,7 @@ void runTests() {
     
     //size is 12
     {
-        CircularLinkedList<int> intcircle({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13});
+        CircularLinkedList<int> intcircle({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
         int val = intcircle.size();
         report(val == 12, "Size is 12");
     }
@@ -117,7 +118,5 @@ void runTests() {
         report(val == 0, "Empty removal");
     }
 
-
-    
     cout << "Results: " << passed << " / " << total << " passed." << endl;
 }
