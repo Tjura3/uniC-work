@@ -1,0 +1,46 @@
+==42915== Memcheck, a memory error detector
+==42915== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==42915== Using Valgrind-3.23.0 and LibVEX; rerun with -h for copyright info
+==42915== Command: ./main
+==42915== 
+[Curr: Laing]
+[Laing] -> [Wilder] -> [Frobisher] -> [curr]
+Eaten: Wilder
+[Curr: Frobisher]
+[Frobisher] -> [Laing] -> [curr]
+Eaten: Laing
+The winner is Frobisher!
+
+[Curr: 1]
+[1] -> [2] -> [3] -> [4] -> [5] -> [curr]
+Killed: 4
+[Curr: 5]
+[5] -> [1] -> [2] -> [3] -> [curr]
+Killed: 3
+[Curr: 5]
+[5] -> [1] -> [2] -> [curr]
+Killed: 5
+[Curr: 1]
+[1] -> [2] -> [curr]
+Killed: 2
+The winner is 1!
+
+Proper test time _________________________________________
+[PASS] Example
+[PASS] Removal check
+[PASS] Wrap removing B
+[PASS] Empty after many loops
+Error: Can't removeNext negative values. Updating input value to 0
+[PASS] If this doesn't say error above, it failed
+[PASS] Size is 12
+[PASS] Empty removal
+Results: 7 / 7 passed.
+==42915== 
+==42915== HEAP SUMMARY:
+==42915==     in use at exit: 0 bytes in 0 blocks
+==42915==   total heap usage: 36 allocs, 36 frees, 74,522 bytes allocated
+==42915== 
+==42915== All heap blocks were freed -- no leaks are possible
+==42915== 
+==42915== For lists of detected and suppressed errors, rerun with: -s
+==42915== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
