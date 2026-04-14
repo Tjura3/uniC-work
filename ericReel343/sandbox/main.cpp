@@ -2,10 +2,82 @@
 #include <string>
 #include <cstdint>
 #include <vector>
+#include <stdexcept>
+
 using namespace std;
 
+//priority queue exercise
+//Nieve implementation
+template <typename T>
+class MyPriorityQueue{
+    private:
+    vector<T> data;
+    public:
+    void enqueue(T item){
+        //ok what...? this is the in class work...
+        data.push_back(item);
+    }
+    T dequeue(){
+        //if(data.size() == 0) throw exception;
+        if(data.size() == 0){
+            throw new runtime_error("Queue is empty.");
+        }
+        int idxMax = 0;
+        for(int i = 0; i < data.size(); i++){
+            if(data[i] > data[idxMax]){
+                idxMax = i;
+            }
+        }
+        T ret = data[idxMax];
+        data[idxMax] = data.back();//data[data.size()-1];
+        data.pop_back();
+        return ret;
+    }
+    int size(){
+        return data.size();
+    }
+};
+
+int main(void){
+    MyPriorityQueue<int> q;
+    q.enqueue(7);
+    q.enqueue(9);
+    q.enqueue(8);
+    q.enqueue(1);
+    while(q.size() != 0){
+        cout << q.dequeue() << endl;
+    }
+}
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+//Bit of fun exercise
 class BitWriter {
 private:
     vector<uint8_t> data;
@@ -72,13 +144,13 @@ int main() {
     bool bits2[] = {0,1,0,0,1,0,1,1};
     report(bits2, 8, "4B");
 
-    /*
-    //Ok now here is an interesting bug, I accidently did bits2, and 16,
-    //But whats cool is that it was adding the garbage data from bits1 to the mix to output 4B-AA
-    //An
-    bool bits3[] = {1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1};
-    report(bits2, 16, "FF-F3");
-    */
+    
+    // //Ok now here is an interesting bug, I accidently did bits2, and 16,
+    // //But whats cool is that it was adding the garbage data from bits1 to the mix to output 4B-AA
+    // //An
+    // bool bits3[] = {1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1};
+    // report(bits2, 16, "FF-F3");
+    
 
     bool bits3[] = {1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1};
     report(bits3, 16, "FF-F3");
@@ -88,31 +160,7 @@ int main() {
 
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*/
 
 
 /* //terminate uint32
