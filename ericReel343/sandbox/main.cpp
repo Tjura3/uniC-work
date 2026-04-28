@@ -1,4 +1,35 @@
 #include <iostream>
+#include <map>
+#include <vector>
+#include <stdexcept>
+#include <algorithm>
+using namespace std;
+void heapify(vector<int> & data){
+    for(int i = 0; i < data.size(); i++){
+        int j = i;
+        int idxParent = (j-1)/2;
+        while(j > 0 && data[idxParent] < data[j]){
+            std::swap(data[idxParent], data[j]);
+            j = idxParent;
+            idxParent = (j-1)/2;
+        }
+    }
+}
+void printVector(const vector<int> & data){
+    for(int i = 0; i < data.size(); i++){
+        std::cout << data[i] << " ";
+    }
+    std::cout << std::endl;
+}
+int main(void){
+    vector<int> data = {5,2,1,7,3,9,4};
+    printVector(data);
+    heapify(data);
+    printVector(data);
+}
+
+/*
+#include <iostream>
 #include <queue>
 #include <string>
 #include <random>
@@ -57,7 +88,7 @@ int main(){
     }
     return 0;
 }
-
+*/
 
 
 
