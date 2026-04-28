@@ -9,8 +9,7 @@ struct Foodstuff {
     int weight;
     int cost;
 
-    Foodstuff(string name, int weight, int cost) 
-        : name(name), weight(weight), cost(cost) {;}
+    Foodstuff(string name, int weight, int cost) : name(name), weight(weight), cost(cost) {;}
 
     double getCostPerPound() const {
         return (double) cost / (double) weight;
