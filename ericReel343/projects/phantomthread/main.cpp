@@ -90,14 +90,17 @@ void runMST(vector<CityCoords>& ccords){
         if(parent[close] != -1){
             cout << ccords[parent[close]].loc << " <---> " << ccords[close].loc << " Distance: " << minEdge[close] << endl;
         }
+        
         for(int j = 0; j < csize; j++){
-            double dist = distanceBetween(cityCoords[close], cityCoords[j]);
+            double dist = distanceBetween(ccords[close], ccords[j]);
             if (dist < minEdge[j]) {
                 minEdge[j] = dist;
                 parent[j] = close;  
             }
         }
     }
+    cout << "Total: " << totalDistance << endl;
+    cout << endl;
 }
 
 int main(){
