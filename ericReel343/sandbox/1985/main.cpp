@@ -54,6 +54,7 @@ class PopulationObserver : public SAXParserEventHandler{
         (void)data;
     }
 };
+
 int main(){
     PopulationObserver observer;
     parseXML(REGIONAL_DATA, observer);
