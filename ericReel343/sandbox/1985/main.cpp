@@ -33,18 +33,14 @@ class PopulationObserver : public SAXParserEventHandler{
     }
     void endElement(const std::string& name){
         if (population.empty()) return;
-        int currentLevelTotal = population.back();
+        int currentTotal = population.back();
         string currentPath = formatPath();
 
-        
-        cout << currentPath << " : " << currentLevelTotal << endl;
-
+        cout << currentPath << " : " << currentTotal << endl;
         population.pop_back();
         if (!population.empty()) {
-            population.back() += currentLevelTotal;
+            population.back() += currentTotal;
         }
-
-        // 4. Pop the path name
         if (!path.empty()) {
             path.pop_back();
         }
@@ -57,8 +53,6 @@ class PopulationObserver : public SAXParserEventHandler{
 
 int main(){
     PopulationObserver observer;
-    parseXML(REGIONAL_DATA, observer);
-
-    
+    parseXML(REGIONAL_DATA, observer); 
     return 0;
 }
