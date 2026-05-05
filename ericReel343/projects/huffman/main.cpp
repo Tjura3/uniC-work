@@ -1,12 +1,9 @@
 #include <iostream>
 #include <string>
 #include <map>
-#include <bitset>
 #include <queue>
 #include <algorithm>
 #include <iomanip>
-
-
 
 using namespace std;
 struct code{
@@ -47,6 +44,15 @@ void buildMap(Node* node, string str, map<char, string>& huffman) {
     buildMap(node->left, str + "0", huffman);
     buildMap(node->right, str + "1", huffman);
 }
+void deleteTree(Node* root) {
+    if (root == nullptr) return;
+    
+    
+    deleteTree(root->left);
+    deleteTree(root->right);
+    
+    delete root;
+}
 
 void runHuffman(string& passage){
     
@@ -59,6 +65,7 @@ void runHuffman(string& passage){
     int tiebreakerCounter = 0;
 
     for (auto const& [ch, count] : freq) {
+        //cout << ch << " " << count << endl;
         pq.push(new Node(ch, count, tiebreakerCounter++));
     }
     
@@ -83,7 +90,7 @@ void runHuffman(string& passage){
     sort(encodings.begin(), encodings.end(), compareCodes);
 
     cout << left << setw(10) << "Symbol" << "Code" << endl;
-    cout << "----------------------" << endl;
+    cout << "__________________________" << endl;
     for (const auto& e : encodings) {
         string label = (e.character == ' ') ? "SPACE" : string(1, e.character);
         cout << left << setw(10) << label << e.bitcode << endl;
@@ -92,34 +99,32 @@ void runHuffman(string& passage){
     string encoded = "";
     for (char ch : passage) encoded += huffmanMap[ch];
 
-    cout << "\nFirst 8 bytes (binary):" << endl;
-    for(int i=0; i<8; i++) cout << encoded.substr(i*8, 8) << " ";
-    
+    cout << "\nFirst 8" << endl;
+    for(int i=0; i<8; i++) {
+        cout << encoded.substr(i*8, 8) << " ";
+    }
+
     double compSize = encoded.length();
     double uncompSize = passage.length() * 8;
     
-    cout << "\n\nSize: " << compSize << " bits (" << compSize/8 << " bytes)" << endl;
+    cout << "\n\nSize: " << compSize << " bits \nbytes " << compSize/8 << endl;
     cout << "Compression Ratio: " << compSize / uncompSize << endl;
+    deleteTree(pq.top());
 }
 
 
 
-
-void testSimple() {
-
-    string passage = "AAAABBBCCCDDEEF";
-    map<char,int> expectedCounts = { {'A', 4}, {'B', 3}, {'C', 3}, {'D',2}, {'E',2}, {'F',1} };
-    
-
-}
 
 
 int main(){
+
+
     string test1 = "Once there were brook trouts in the streams in the mountains. "
     "You could see them standing in the amber current where the white edges of their fins wimpled softly in the flow. "
     "They smelled of moss in your hand. Polished and muscular and torsional. On their backs were vermiculate patterns that were maps of the world in its becoming. "
     "Maps and mazes. Of a thing which could not be put back. Not be made right again. In the deep glens where they lived all things were older than man and they hummed of mystery.";
     runHuffman(test1);
+
 
     return 0;
 }
