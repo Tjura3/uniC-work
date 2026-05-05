@@ -93,7 +93,7 @@ int main(){
     }
 
     string encoded = "";
-    for (char ch : passage) encoded += huffmanCodeMap[ch];
+    for (char ch : passage) encoded += huffmanMap[ch];
 
     cout << "\nFirst 8 bytes (binary):" << endl;
     for(int i=0; i<8; i++) cout << encoded.substr(i*8, 8) << " ";
