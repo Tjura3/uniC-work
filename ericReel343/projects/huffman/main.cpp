@@ -48,11 +48,8 @@ void buildMap(Node* node, string str, map<char, string>& huffman) {
     buildMap(node->right, str + "1", huffman);
 }
 
-int main(){
-    string passage = "Once there were brook trouts in the streams in the mountains. "
-    "You could see them standing in the amber current where the white edges of their fins wimpled softly in the flow. "
-    "They smelled of moss in your hand. Polished and muscular and torsional. On their backs were vermiculate patterns that were maps of the world in its becoming. "
-    "Maps and mazes. Of a thing which could not be put back. Not be made right again. In the deep glens where they lived all things were older than man and they hummed of mystery.";
+void runHuffman(string& passage){
+    
     
     //Use a std::map<char,int> to accumulate your character frequencies.  
     //Iterate the collection in order to populate the priority queue when building the tree.
@@ -103,6 +100,26 @@ int main(){
     
     cout << "\n\nSize: " << compSize << " bits (" << compSize/8 << " bytes)" << endl;
     cout << "Compression Ratio: " << compSize / uncompSize << endl;
+}
+
+
+
+
+void testSimple() {
+
+    string passage = "AAAABBBCCCDDEEF";
+    map<char,int> expectedCounts = { {'A', 4}, {'B', 3}, {'C', 3}, {'D',2}, {'E',2}, {'F',1} };
+    
+
+}
+
+
+int main(){
+    string test1 = "Once there were brook trouts in the streams in the mountains. "
+    "You could see them standing in the amber current where the white edges of their fins wimpled softly in the flow. "
+    "They smelled of moss in your hand. Polished and muscular and torsional. On their backs were vermiculate patterns that were maps of the world in its becoming. "
+    "Maps and mazes. Of a thing which could not be put back. Not be made right again. In the deep glens where they lived all things were older than man and they hummed of mystery.";
+    runHuffman(test1);
 
     return 0;
 }
