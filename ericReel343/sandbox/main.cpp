@@ -1,4 +1,48 @@
 #include <iostream>
+#include <cstdint>
+
+using namespace std;
+const uint32_t PROF_REEL = 0x01;       //same as 1, same as 1 << 0
+const uint32_t SPIDERS = 0x02;         //same as 2 same as 1 << 1
+const uint32_t RELATIONSHIPS = 0x04;   //same as 4, same as 1 << 2
+const uint32_t FAMILY_VAN_VANISHING_INTO_MURKY_DEPTHS = 0x08;   //same as 8, same as 1 << 3
+
+void registerTrauma(uint32_t& personData, uint32_t traumas){
+    personData |= traumas; //bitwise or should cover this trauma
+}
+
+void clearTrauma(uint32_t personData, uint32_t traumas){
+    personData &= ~traumas;     //~ is bitwise not
+}
+
+uint32_t getTraumaCount(uint32_t personData){
+    uint32_t count = 0;
+    while (personData != 0){
+        if(personData & 1 == 1){
+        //     1100 1111
+        //    &0000 0001
+        //     0000 0001
+        //     right shift >>= 1
+            count++;
+        }
+        personData >>= 1;
+    }
+    
+}
+
+bool checkForTrauma(uint32_t personData, uint32_t traumas){
+    uint32_t registeredTraumas = personData & traumas;
+    return registeredTraumas == traumas;
+}
+
+void demoTrauma(){
+    uint32_t lucasData = 0;
+    registerTrauma(lucasData, PROF_REEL | SPIDERS | RELATIONSHIPS | FAMILY_VAN_VANISHING_INTO_MURKY_DEPTHS);
+}
+
+
+/*
+#include <iostream>
 #include <map>
 #include <vector>
 #include <stdexcept>
@@ -27,6 +71,7 @@ int main(void){
     heapify(data);
     printVector(data);
 }
+*/
 
 /*
 #include <iostream>
