@@ -9,7 +9,6 @@ class PopulationObserver : public SAXParserEventHandler{
     private:
     vector<string> path;
     vector<int> population;
-
     string formatPath() {
         string fullPath = "";
         for (int i = 0; i < path.size(); i++) {
@@ -17,18 +16,15 @@ class PopulationObserver : public SAXParserEventHandler{
         }
         return fullPath;
     }
-
     public:
     void startElement(const string& name, map<string, string>& datamap){
         if (datamap.count("name")) {
             path.push_back(datamap["name"]);
         }
-
         int pop = 0;
         if (datamap.count("population")) {
             pop = std::stoi(datamap["population"]);
         }
-
         population.push_back(pop);
     }
     void endElement(const std::string& name){

@@ -18,7 +18,7 @@ class MessageGenerator{
 
     inline static MessageGenerator* instance;
     //when we make a member variable static, all classes will use it? (confusing text)
-
+        
     public:
     //this method is apart of the class, so it can call the constructor.
     static void init(){
