@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cstdint>
-
+#include <iostream>
+#include <map>
+#include <vector>
+#include <queue>
 using namespace std;
 const uint32_t PROF_REEL = 0x01;       //same as 1, same as 1 << 0
 const uint32_t SPIDERS = 0x02;         //same as 2 same as 1 << 1
@@ -431,3 +434,55 @@ int main(){
 //     delete leftg;
 //     return 0;
 // }
+
+
+
+typedef pair<string, int> NodeDist; // {nodeID, distance}
+vector<pair<string, int>> getShortestPath(string startNode, string endNode, map<string, vector<pair<string, int>>> graph) {
+    // Stores the shortest distance from startNode to every other node
+    map<string, int> distances;
+    // Stores the "previous" node to reconstruct the path
+    map<string, string> parent;
+    for (auto const& [node, neighbors] : graph) {
+        distances[node] = numeric_limits<int>::max();
+    }
+    // Min-heap priority queue: {distance, nodeID}
+    // Note: pair orders by the first element, so distance goes first.
+    priority_queue<pair<int, string>, vector<pair<int, string>>, greater<pair<int, string>>> pq;
+    distances[startNode] = 0;
+    pq.push({0, startNode});
+    while (!pq.empty()) {
+        int d = pq.top().first;
+        string u = pq.top().second;
+        pq.pop();
+        // Optimization: if we found a better way already, skip this stale entry
+        if (d > distances[u]) continue;
+        // If we reached the goal, we could technically stop early
+        if (u == endNode) break;
+        for (auto& edge : graph[u]) {
+            string v = edge.first;
+            int weight = edge.second;
+            // The Dijkstra "Relaxation" step:
+            // Is the path to 'u' + edge weight better than what we knew for 'v'?
+            if (distances[u] + weight < distances[v]) {
+                distances[v] = distances[u] + weight;
+                parent[v] = u;
+                pq.push({distances[v], v});
+            }
+        }
+    }
+    // Reconstruct the path from endNode back to startNode
+    vector<pair<string, int>> path;
+    if (distances[endNode] == numeric_limits<int>::max()) return path; // No path found
+    string curr = endNode;
+    while (curr != "") {
+        path.push_back({curr, distances[curr]});
+        curr = parent[curr]; // Move backwards
+        if (curr == startNode) {
+            path.push_back({startNode, 0});
+            break;
+        }
+    }
+    reverse(path.begin(), path.end());
+    return path;
+}
