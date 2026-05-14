@@ -1,3 +1,4 @@
+//Thomas Juranich Nice Shoes
 #include <string>
 #include <iostream>
 #include <unordered_set>
@@ -19,13 +20,11 @@ public:
     }
     
     // Add an overload of operator== 
-    bool operator==(const Shoe& n){
+    bool operator==(const Shoe& n) const{
         return ((size == n.size) && (color == n.color) && (type == n.type));
     }
 
     // Add a specialization of std::hash<Shoe> 
-    // Write code to add a bunch of shoes to an std::unordered_set<Shoe>.  
-    // Validate that the unordered_set identifies and eliminates duplicates correctly.
     friend struct hash<Shoe>;
     
 };
@@ -43,28 +42,34 @@ namespace std {
 }
 
 int main(){
-    unordered_set<Shoe> closet;
+    // Write code to add a bunch of shoes to an std::unordered_set<Shoe>.  
+    // Validate that the unordered_set identifies and eliminates duplicates correctly.
+    unordered_set<Shoe> shoeset;
 
-    // 2. Add shoes, including duplicates
+    
     Shoe s1(10.5, "Red", "Sneaker");
     Shoe s2(9.0, "Black", "Boot");
-    Shoe s3(10.5, "Red", "Sneaker"); // Exact duplicate of s1
+    Shoe s3(10.5, "Red", "Sneaker"); //Dupe
+    Shoe s4(11.5, "Green", "Sneaker");
+    Shoe s5(11.5, "Green", "Sneaker");
 
-    closet.insert(s1);
-    closet.insert(s2);
-    closet.insert(s3); // Should be ignored
+    shoeset.insert(s1);
+    shoeset.insert(s2);
+    shoeset.insert(s3);
+    shoeset.insert(s4);
+    shoeset.insert(s5); 
 
-    // 3. Validate results
-    cout << "Total shoes in set: " << closet.size() << endl;
-    cout << "Contents:" << endl;
-    for (const auto& shoe : closet) {
+    cout << "Inserted 5 Shoes" << endl;
+    cout << "Total shoes: " << shoeset.size() << endl;
+    cout << "_______________Shoes in set_______________" << endl;
+    for (const auto& shoe : shoeset) {
         cout << shoe << endl;
     }
 
-    if (closet.size() == 2) {
-        cout << "\nValidation Success: Duplicates were correctly eliminated!" << endl;
+    if (shoeset.size() == 3) {
+        cout << "\nSuccess, Dupes eliminated.\n" << endl;
     } else {
-        cout << "\nValidation Failed: Duplicate found in set." << endl;
+        cout << "\nFailure, Duplicate found in set.\n" << endl;
     }
 
     return 0;

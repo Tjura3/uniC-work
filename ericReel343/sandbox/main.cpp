@@ -1,3 +1,80 @@
+//pFunc
+//pointers to functions
+#include <iostream>
+#include <string>
+using namespace std;
+
+string getALife() {return "get a life!";}
+string goAway() {return "Go away son, you bother me!";}
+string howAboutSomeMoney() {
+    string retval = "";
+    for(int i = 0; i < 10; i++){
+        retval += "how about some money?\n";
+    }
+    return retval;
+}
+
+void greeting(string name, string (*pfnGetMessage)()){
+    cout << "Hey " << name << ", " << pfnGetMessage() << "\n";
+}
+
+string (*getMessage())(){
+    return howAboutSomeMoney;
+}
+
+int main(){
+    greeting("Thomas", getALife);
+    
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*#include <iostream>
+#include <string>
+using namespace std;
+class Base{
+    public:
+    virtual void dothis() { cout << "Base::dothis\n"; }		// virtual
+    void dothat() { cout << "Base::dothat\n";}			// not virtual
+
+};
+
+class Derived : public Base{
+    public:
+    void dothis() { cout << "Derived::dothis\n";}		// override the virtual method
+    void dothat() { cout << "Derived::dothat\n";}		// override non-virtual method
+};
+
+int main(){
+    //Base* pBase = new Derived();
+    Derived* pDerived = new Derived();
+    Base* pBase = pDerived;
+    pBase->dothis();	// print Derived::dothis
+    pBase->dothat();	// prints Base::dothat
+    pDerived->dothat();
+    
+    delete pDerived;
+    delete pBase;
+    return 0;
+}
+*/
+
+/*
 #include <iostream>
 #include <cstdint>
 #include <iostream>
@@ -42,7 +119,7 @@ void demoTrauma(){
     uint32_t lucasData = 0;
     registerTrauma(lucasData, PROF_REEL | SPIDERS | RELATIONSHIPS | FAMILY_VAN_VANISHING_INTO_MURKY_DEPTHS);
 }
-
+*/
 
 /*
 #include <iostream>
@@ -435,7 +512,7 @@ int main(){
 //     return 0;
 // }
 
-
+/*
 
 typedef pair<string, int> NodeDist; // {nodeID, distance}
 vector<pair<string, int>> getShortestPath(string startNode, string endNode, map<string, vector<pair<string, int>>> graph) {
@@ -486,3 +563,4 @@ vector<pair<string, int>> getShortestPath(string startNode, string endNode, map<
     reverse(path.begin(), path.end());
     return path;
 }
+*/
