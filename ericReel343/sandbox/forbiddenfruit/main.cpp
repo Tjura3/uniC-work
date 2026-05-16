@@ -21,9 +21,11 @@ class Mold : public Fruit{
 
 int main(){
     vector<Fruit*> vec {new Ripe(), new Mold()};
+
     for(Fruit* ptr : vec){
         ptr -> eatMe();
     }
+    
     for(auto& ptr : vec){
         delete ptr;
     }
