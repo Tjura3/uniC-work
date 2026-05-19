@@ -1,3 +1,9 @@
+//Function pointers
+
+
+
+
+/*
 //pFunc
 //pointers to functions
 #include <iostream>
@@ -27,18 +33,7 @@ int main(){
     
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
+*/
 
 
 
