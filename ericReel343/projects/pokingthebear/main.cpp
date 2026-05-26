@@ -57,19 +57,19 @@ void bearStateGame(){
                     currentState = ANNOYED;
                     break;
                 case ANNOYED:
-                    cout << "> The bear gives you a nasty scratch.";
+                    cout << "> The bear scratches you";
                     currentState = ANGRY;
                     break;
                 case ANGRY:
-                    cout << "> The bear gives you a savage bite.";
+                    cout << "> The bear bites you.";
                     currentState = VERY_ANGRY;
                     break;
                 case VERY_ANGRY:
-                    cout << "> The bear gives you a severe mauling.";
+                    cout << "> The bear mauls you.";
                     currentState = EXTREME_ANGER;
                     break;
                 case EXTREME_ANGER:
-                    cout << "> The bear reduces you to bits and pieces.";
+                    cout << "> The bear desintigrates you with it's mind.";
                     currentState = FINAL; 
                     break;
                 default:
@@ -92,7 +92,7 @@ void bearStateGame(){
 
     cout << "\n========================================\n";
     cout << "GAME OVER!\n";
-    cout << "Timothy Treadwell would be disappointed. You are now bear food.\n";
+    cout << "You are now bear food.\n";
     cout << "========================================\n";
 }
 

@@ -2,14 +2,13 @@
 #include <vector>
 #include <string>
 #include <random>
-#include <memory>
-#include <numeric>
 
 using namespace std;
 
 // ==========================================
-// Rng Class (Provided)
+// Rng
 // ==========================================
+
 class Rng {
 private:
     std::mt19937 gen;
@@ -46,7 +45,7 @@ public:
     int getAttackDamage() override { return 12; }
     string takeDamage(int amount) override {
         hp -= amount;
-        if (hp <= 0) return "The Avocado splits open, splashing pit-guacamole all over the wasteland!";
+        if (hp <= 0) return "The Avocado splits open, spilling all over the wasteland!";
         return "Your strike gashes its leathery skin, but it stays airborne!";
     }
     bool isLiving() override { return hp > 0; }
@@ -61,8 +60,8 @@ public:
     int getAttackDamage() override { return 6; }
     string takeDamage(int amount) override {
         hp -= amount;
-        if (hp <= 0) return "The Strawberry explodes into a cloud of red jam!";
-        return "The Strawberry shrieks piercingly as its sweet juices leak!";
+        if (hp <= 0) return "The Strawberry bursts as jam flies everywhere!";
+        return "The Strawberry shrieks piercingly as its juices leak!";
     }
     bool isLiving() override { return hp > 0; }
 };
@@ -76,7 +75,7 @@ public:
     int getAttackDamage() override { return 25; }
     string takeDamage(int amount) override {
         hp -= amount;
-        if (hp <= 0) return "The massive Watermelon shatters into a hundred innocent chunks!";
+        if (hp <= 0) return "The massive Watermelon shatters into a hundred chunks!";
         return "The thick rind absorbs most of the impact, echoing a hollow thud!";
     }
     bool isLiving() override { return hp > 0; }
@@ -88,15 +87,11 @@ public:
 class FruitFactory {
 private:
     Rng& rng;
-    
-    // Function pointer that takes no arguments and returns a Fruit*
     typedef Fruit* (*SpawnFunction)();
-
-    // A vector of pairs: <Weight, SpawnFunction>
     vector<pair<int, SpawnFunction>> fruitVector;
     int totalWeight = 0;
 
-    // Static creator helper methods to pass as function pointers
+    // Pass as function pointers
     static Fruit* createAvocado() { return new FlyingAvocado(); }
     static Fruit* createStrawberry() { return new ShriekingStrawberry(); }
     static Fruit* createWatermelon() { return new VampireWatermelon(); }
@@ -107,24 +102,23 @@ public:
         fruitVector.push_back({50, &createStrawberry});
         fruitVector.push_back({35, &createAvocado});
         fruitVector.push_back({15, &createWatermelon});
-
-        // Calculate the total pool weight
+        // Total weight in case I want to add more later.
         for (const pair<int, SpawnFunction>& item : fruitVector) {
             totalWeight += item.first;
         }
     }
 
     Fruit* spawn() {
-        // 1. Generate random integer between 0 and totalWeight - 1
         int roll = rng.randint(0, totalWeight - 1);
         int accumulatedWeight = 0;
 
-        // 2. Loop through tracking running total
-        for (const auto& item : fruitVector) {
+        
+        for (const pair<int, SpawnFunction>& item : fruitVector) {
             accumulatedWeight += item.first;
-            // 3. Stop when accumulated weight is greater than the roll
+            
             if (accumulatedWeight > roll) {
-                return item.second(); // Invoke the function pointer
+                // Invoke the function pointer
+                return item.second(); 
             }
         }
         return fruitVector.back().second(); 
@@ -132,24 +126,24 @@ public:
 };
 
 // ==========================================
-// Validation & Gameplay
+// Validation
 // ==========================================
 void factoryProportionTest() {
     cout << "--- STARTING FACTORY PROPORTION TEST ---\n";
-    Rng testRng(42); // Seeded for predictability 
+    Rng testRng(42); 
     FruitFactory factory(testRng);
 
     int strawberryCount = 0;
     int avocadoCount = 0;
     int watermelonCount = 0;
-    const int TEST_RUNS = 10000;
+    const int TEST_RUNS = 1000000;
 
     for (int i = 0; i < TEST_RUNS; ++i) {
         Fruit* f = factory.spawn();
         if (f->getName() == "Shrieking Strawberry") strawberryCount++;
-        else if (f->getName() == "Flying Avocado of Doom") avocadoCount++;
+        else if (f->getName() == "Flying Avocado") avocadoCount++;
         else if (f->getName() == "Vampire Watermelon") watermelonCount++;
-        delete f; // Prevent memory leaks
+        delete f; 
     }
 
     cout << "Target Ratio:  Strawberry: 50% | Avocado: 35% | Watermelon: 15%\n";
@@ -160,11 +154,10 @@ void factoryProportionTest() {
     cout << "---------------------------------------\n\n";
 }
 
-int main() {
-    // 1. First, run the required validation test
-    factoryProportionTest();
-
-    // 2. Setup actual unpredictable game variables
+// ==========================================
+// Game
+// ==========================================
+void playGame(){
     Rng gameRng; 
     FruitFactory factory(gameRng);
 
@@ -174,16 +167,15 @@ int main() {
     cout << "Welcome to the Produce Wasteland. Protect your vitals.\n";
     cout << "========================================================\n\n";
 
-    // 3. Simple Game Loop
     while (playerHp > 0) {
         daysSurvived++;
         cout << "=== Day " << daysSurvived << " in the Wasteland ===\n";
         
-        // Spawn a random flying terror
+        // Spawn fruiet
         Fruit* enemy = factory.spawn();
         cout << "A wild " << enemy->getName() << " drops from the radioactive clouds!\n";
 
-        // Battle loop for this specific encounter
+        // Loop battle till death do part
         while (enemy->isLiving() && playerHp > 0) {
             // Player attacks first
             int playerDamage = gameRng.randint(10, 25);
@@ -199,11 +191,10 @@ int main() {
             }
             cout << "\n";
         }
-
-        delete enemy; // Clean up the heap-allocated object
+        delete enemy; 
 
         if (playerHp > 0) {
-            cout << "You managed to scavenge a safe spot to sleep for the night.\n";
+            cout << "You managed to find a safe spot to sleep for the night.\n";
             // Small healing between rounds
             playerHp = min(100, playerHp + 15);
             cout << "Resting recovers 15 HP. Current Health: " << playerHp << "\n\n";
@@ -213,6 +204,15 @@ int main() {
     cout << "========================================================\n";
     cout << "GAME OVER. Produce Got ya.\n";
     cout << "Survived for " << daysSurvived << " days.\n";
+}
+
+int main() {
+    // Validate proportion
+    factoryProportionTest();
+
+    // Play the game
+    playGame();
+    
     
     return 0;
 }
