@@ -35,14 +35,14 @@ public:
 };
 
 // ==========================================
-// Concrete Fruit Monsters
+// Fruit monsters
 // ==========================================
 class FlyingAvocado : public Fruit {
 private:
     int hp = 30;
 public:
-    string getName() override { return "Flying Avocado of Doom"; }
-    string getAttackMessage() override { return "launches its massive, heat-seeking pit at your chest!"; }
+    string getName() override { return "Flying Avocado"; }
+    string getAttackMessage() override { return "launches it's pit at your chest!"; }
     int getAttackDamage() override { return 12; }
     string takeDamage(int amount) override {
         hp -= amount;
@@ -83,17 +83,17 @@ public:
 };
 
 // ==========================================
-// Fruit Factory (Weighted Selection)
+// Fruit Factory 
 // ==========================================
 class FruitFactory {
 private:
     Rng& rng;
     
-    // Alias for a function pointer that takes no arguments and returns a Fruit*
+    // Function pointer that takes no arguments and returns a Fruit*
     typedef Fruit* (*SpawnFunction)();
 
     // A vector of pairs: <Weight, SpawnFunction>
-    vector<pair<int, SpawnFunction>> registry;
+    vector<pair<int, SpawnFunction>> fruitVector;
     int totalWeight = 0;
 
     // Static creator helper methods to pass as function pointers
@@ -103,14 +103,13 @@ private:
 
 public:
     FruitFactory(Rng& engine) : rng(engine) {
-        // Register types with designated weights
-        // Common: Strawberry (50), Uncommon: Avocado (35), Rare: Watermelon (15)
-        registry.push_back({50, &createStrawberry});
-        registry.push_back({35, &createAvocado});
-        registry.push_back({15, &createWatermelon});
+        // Strawberry 50%, Avocado 35%, Watermelon 15%
+        fruitVector.push_back({50, &createStrawberry});
+        fruitVector.push_back({35, &createAvocado});
+        fruitVector.push_back({15, &createWatermelon});
 
         // Calculate the total pool weight
-        for (const pair<int, SpawnFunction>& item : registry) {
+        for (const pair<int, SpawnFunction>& item : fruitVector) {
             totalWeight += item.first;
         }
     }
@@ -121,21 +120,21 @@ public:
         int accumulatedWeight = 0;
 
         // 2. Loop through tracking running total
-        for (const auto& item : registry) {
+        for (const auto& item : fruitVector) {
             accumulatedWeight += item.first;
             // 3. Stop when accumulated weight is greater than the roll
             if (accumulatedWeight > roll) {
                 return item.second(); // Invoke the function pointer
             }
         }
-        return registry.back().second(); // Fallback safety
+        return fruitVector.back().second(); 
     }
 };
 
 // ==========================================
 // Validation & Gameplay
 // ==========================================
-void runFactoryProportionTest() {
+void factoryProportionTest() {
     cout << "--- STARTING FACTORY PROPORTION TEST ---\n";
     Rng testRng(42); // Seeded for predictability 
     FruitFactory factory(testRng);
@@ -163,7 +162,7 @@ void runFactoryProportionTest() {
 
 int main() {
     // 1. First, run the required validation test
-    runFactoryProportionTest();
+    factoryProportionTest();
 
     // 2. Setup actual unpredictable game variables
     Rng gameRng; 
@@ -212,8 +211,8 @@ int main() {
     }
 
     cout << "========================================================\n";
-    cout << "GAME OVER. You were ultimately consumed by the produce.\n";
-    cout << "You managed to survive for " << daysSurvived << " days.\n";
+    cout << "GAME OVER. Produce Got ya.\n";
+    cout << "Survived for " << daysSurvived << " days.\n";
     
     return 0;
 }
