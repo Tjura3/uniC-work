@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include <vector>
 #include <string>
@@ -25,12 +24,9 @@ public:
     }
 };
 
-// ==========================================
-// Base Fruit Class (Provided)
-// ==========================================
 class Fruit {
 public:
-    virtual ~Fruit() = default; // Added virtual destructor for proper cleanup
+    virtual ~Fruit() = default;
     virtual string getName() = 0;
     virtual string getAttackMessage() = 0;
     virtual int getAttackDamage() = 0;
@@ -114,7 +110,7 @@ public:
         registry.push_back({15, &createWatermelon});
 
         // Calculate the total pool weight
-        for (const auto& item : registry) {
+        for (const pair<int, SpawnFunction>& item : registry) {
             totalWeight += item.first;
         }
     }
