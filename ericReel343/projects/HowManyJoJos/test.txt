@@ -1,0 +1,6 @@
+Jordan,M,500
+Jolie,F,150
+Jo,F,10
+John,M,200
+Joanna,F,85
+Amelia,F,300

@@ -10,23 +10,25 @@ void findJo(string filename){
         cerr << "Error: Could not open the file." << endl;
         exit(1);
     }
-    regex pattern(R"(jo.*),F,(\d*)");
+    regex pattern(R"(^(Jo[^,]*),F,([0-9]+))");
     smatch matches;
     string line;
-    int unames = 0;
-    int unumber = 0;
+    int uNames = 0;
+    int uNumber = 0;
     while(getline(file, line)){
         if(regex_search(line, matches, pattern)){
-            string name = matches[0].str();
-            string scount = matches[1].str();
+            string name = matches[1].str();
+            string scount = matches[2].str();
+
             int count = stoi(scount);
             cout << name << ", " << count << endl;
-            unames++;
-            unumber += count;
+
+            uNames++;
+            uNumber += count;
         }
     }
-    cout << "Number of unique names: " << unames << endl;
-    cout << "Number of total children: " << unumber << endl;
+    cout << "Number of unique names: " << uNames << endl;
+    cout << "Number of total children: " << uNumber << endl;
     file.close();
 }
 
@@ -43,7 +45,7 @@ int main(){
         testFile << "Amelia,F,300\n";    // N
         testFile.close();
     }
-    findJo(testFileName);
+    //findJo(testFileName);
     findJo("yob2024.txt");
     return 0;
 }
