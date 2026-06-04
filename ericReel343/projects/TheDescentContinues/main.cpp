@@ -92,6 +92,83 @@ public:
 
 };
 
+class KitchenSinkParser {
+private:
+    // expr -> term {+|- term}
+    int expr(Lexer& lexer) {
+        int val = term(lexer);
+        Token token;
+
+        while(lexer.getNextToken(token) && (token.type == PLUS || token.type == MINUS)) {
+            lexer.removeToken(token);
+            int rightTerm = term(lexer);
+            if (token.type == PLUS) {
+                val += rightTerm;
+            } else {
+                val -= rightTerm;
+            }
+        }
+        return val;
+    }
+
+    // term -> factor {*|/ factor}
+    int term(Lexer& lexer) {
+        int val = factor(lexer);
+        Token token;
+
+        while(lexer.getNextToken(token) && (token.type == MULTIPLY || token.type == DIVIDE)) {
+            lexer.removeToken(token);
+            int rightFactor = factor(lexer);
+            if (token.type == MULTIPLY) {
+                val *= rightFactor;
+            } else {
+                if (rightFactor == 0) {
+                    throw std::runtime_error("WARNING: DIVIDE BY ZERO DETECTED.");
+                }
+                val /= rightFactor;
+            }
+        }
+        return val;
+    }
+
+    // factor -> NUMBER | ( expr )
+    int factor(Lexer& lexer) {
+        Token token;
+        lexer.getNextToken(token);
+
+        if (token.type == NUMBER) {
+            lexer.removeToken(token);
+            return std::stoi(token.value);
+        } 
+        
+        // Parentheses matching
+        else if (token.type == LPAREN) {
+            lexer.removeToken(token); 
+            
+            int internalResult = expr(lexer); // Recursively parse internal
+            
+            Token closingToken;
+            lexer.getNextToken(closingToken);
+            if (closingToken.type == RPAREN) {
+                lexer.removeToken(closingToken); 
+                return internalResult;
+            } else {
+                throw std::runtime_error("Parse Error: Mismatched parentheses.");
+            }
+        } 
+        else {            
+            throw std::runtime_error("Parse Error: Unexpected token found in factor.");
+        }
+    }
+
+public:
+    KitchenSinkParser() {;}
+    
+    int parse(string statement) {
+        Lexer lexer(statement);
+        return expr(lexer);
+    }
+};
 
 /* //AST parser and Eval parser exercises
 // expr = factor {- factor}
@@ -214,7 +291,50 @@ class EvalParser{
 };
 
 */
+
 int main() {
+
+    KitchenSinkParser parser;
+    struct CyborgTest {
+        string exprStr;
+        int expected;
+    };
+    vector<CyborgTest> testSuite = {
+        {"10 + 2 * 3", 16},          // Multiplication + pemdas (10 + 6)
+        {"(10 + 2) * 3", 36},        // Parentheses first (12 * 3)
+        {"50 - 10 - 5 - 5", 30},     // Subtraction
+        {"24 / 2 / 3", 4},           // Division
+        {"100 / (2 * (3 + 2))", 10}, // Nested parentheses (100/(2*5))
+        {"2 * 3 + 4 * 5", 26},       // Pemdas check
+        {"2 / 0", 0}                 // Divide zero break
+    };
+
+    cout << "--- THE FINAL PROJECT --- \n\n";
+    for(const auto& test : testSuite) {
+        try {
+            int result = parser.parse(test.exprStr);
+            cout << "Input:    " << test.exprStr << "\n";
+            cout << "Result:   " << result << " (Expected: " << test.expected << ")\n";
+            if(result == test.expected) {
+                cout << "_CLEAR._\n";
+            } else {
+                cout << "Wr0Ng__.\n";
+            }
+        } catch (const std::exception& e) {
+            cout << "Something broke: " << e.what() << "\n";
+        }
+        cout << "__________________________________________________\n";
+    }
+
+    cout << "Testing Missing Bracket:\n";
+    try {
+        parser.parse("(5 + 5");
+    } catch (const std::runtime_error& e) {
+        cout << "Caught Expected Exception: " << e.what() << "\n";
+    }
+
+    return 0;
+
     /* //AST parser exercise
     ASTParser parser;
     vector<string> statements = {"1-2-3"};
@@ -279,6 +399,5 @@ int main() {
 
     return 0;
     */
-   
-    return 0;
+    
 }
