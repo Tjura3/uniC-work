@@ -46,29 +46,12 @@ int main() {
         printf("%6d %14lld %7.2f\n", N, ops, ratio);
         prev = ops;
     }
-    /*
-    {
-        int N = 1000;
-        vector<int> a(N);
-        for (int& x : a) x = dist(rng);
-        long long ops = 0;
-        count3(a, ops);
-        double ratio = prev ? (double)ops / prev : 0.0;
-        printf("%6d %14lld %7.2f\n", N, ops, ratio);
-        prev = ops;
-    }
-    {
-        int N = 1600;
-        vector<int> a(N);
-        for (int& x : a) x = dist(rng);
-        long long ops = 0;
-        count3(a, ops);
-        double ratio = prev ? (double)ops / prev : 0.0;
-        printf("%6d %14lld %7.2f\n", N, ops, ratio);
-        prev = ops;
-    }
-        */
     // QUESTION (answer in one sentence in your submission):
     //   What order of growth do these numbers show, and which column proves it?
+    //      Order of growth is cubic, because as it doubles, the ratio column approaches 8 which follows the cubic ratio.
+
+    //      N is doubled, and the ratio for each doubling approaches 8. therefore, the ratio is cubic.
+    //      for 16000 operations, the formula is (operations = N(N-1)(N-2)a) and we can extract a using 250. 
+    //      682,538,672,000
     return 0;
 }
