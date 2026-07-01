@@ -30,17 +30,47 @@ bool NDLList<Object>::isEmpty() const {
 template <class Object>
 int NDLList<Object>::size() const {
     // TODO: count the nodes.
-    return 0;
+    //assuming 1 = 1 node
+    int size = 0;
+    LListNode<Object>* curr = head;
+    while(curr != nullptr){
+        size++;
+        curr = curr->next;
+    }
+    return size;
 }
 
 template <class Object>
 void NDLList<Object>::clear() {
-    // TODO: walk the list deleting each node; set head = nullptr.
+    LListNode<Object>* curr = head;
+    while(curr != nullptr){
+        LListNode<Object>* next = curr -> next;
+        delete curr;
+        curr->next = nullptr;
+        curr = next;
+    }
+    head = nullptr;
 }
 
 template <class Object>
 void NDLList<Object>::insert(const Object& obj, int index) {
+    if(index < 0) return;
+    
+    LListNode<Object>* ins = new LListNode<Object>{obj, nullptr};
+    
+    if(index == 0 || head == nullptr){//insert at head
+        ins->next = head;
+        head = ins;
+        return;
+    }
+    LListNode<Object>* curr = head;
+    for (int i = 0; i < index - 1 && curr->next != nullptr; i++) {
+        curr = curr->next;
+    }   
+    ins->next = curr->next;
+    curr->next = ins;
     // TODO: index 0 inserts at the head; otherwise after (index-1) nodes.
+    //Hopefully this logic is correct.
 }
 
 template <class Object>

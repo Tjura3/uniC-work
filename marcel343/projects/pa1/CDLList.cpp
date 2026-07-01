@@ -3,7 +3,7 @@
 // Compilable skeleton: the constructor builds a valid empty circular list with a
 // dummy header; the rest are stubs for you to implement.
 
-#include "CDLList.h" //why is this not in here and in the .h?
+//#include "CDLList.h" //why is this not in here and in the .h?
 
 template <class Object>
 CDLList<Object>::CDLList() {
@@ -18,6 +18,7 @@ CDLList<Object>::CDLList(const CDLList& rhs) {
     header->next = header;
     header->prev = header;
     // TODO: deep-copy every DATA node of rhs (in order) into this list.
+    
 }
 
 template <class Object>
