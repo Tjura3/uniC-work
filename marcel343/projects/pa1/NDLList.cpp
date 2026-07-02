@@ -2,13 +2,22 @@
 // This file is #included at the bottom of NDLList.h. Do NOT compile it directly.
 // Compilable skeleton: every method has a stub so the project builds. Replace the
 // TODOs with real implementations. (Stubs intentionally leak / return defaults.)
-
+#include "NDLList.h"
 template <class Object>
 NDLList<Object>::NDLList() : head(nullptr) {}
 
 template <class Object>
 NDLList<Object>::NDLList(const NDLList& rhs) : head(nullptr) {
-    // TODO: deep-copy every node of rhs into this list.
+    if(rhs == nullptr) return;
+    head = new LListNode<Object>{rhs.head->item, nullptr};
+
+    LListNode<Object>* rcurr = rhs.head->next;
+    LListNode<Object>* curr = head;
+    while(rcurr != nullptr){
+        curr->next = new LListNode<Object>{rcurr->item, nullptr};
+        rcurr = rcurr->next;
+        curr = curr->next;
+    }
 }
 
 template <class Object>
@@ -18,6 +27,9 @@ NDLList<Object>::~NDLList() {
 
 template <class Object>
 const NDLList<Object>& NDLList<Object>::operator=(const NDLList& rhs) {
+    if(rhs == this) return *this;
+    clear();
+    
     // TODO: guard self-assignment; free current nodes; deep-copy rhs.
     return *this;
 }
@@ -44,7 +56,7 @@ template <class Object>
 void NDLList<Object>::clear() {
     LListNode<Object>* curr = head;
     while(curr != nullptr){
-        LListNode<Object>* next = curr -> next;
+        LListNode<Object>* next = curr->next;
         delete curr;
         curr->next = nullptr;
         curr = next;
