@@ -29,7 +29,16 @@ template <class Object>
 const NDLList<Object>& NDLList<Object>::operator=(const NDLList& rhs) {
     if(rhs == this) return *this;
     clear();
-    
+    if(rhs == nullptr) return;
+    head = new LListNode<Object>{rhs.head->item, nullptr};
+
+    LListNode<Object>* rcurr = rhs.head->next;
+    LListNode<Object>* curr = head;
+    while(rcurr != nullptr){
+        curr->next = new LListNode<Object>{rcurr->item, nullptr};
+        rcurr = rcurr->next;
+        curr = curr->next;
+    }
     // TODO: guard self-assignment; free current nodes; deep-copy rhs.
     return *this;
 }
@@ -57,8 +66,8 @@ void NDLList<Object>::clear() {
     LListNode<Object>* curr = head;
     while(curr != nullptr){
         LListNode<Object>* next = curr->next;
-        delete curr;
-        curr->next = nullptr;
+        //curr->next = nullptr;
+        delete curr; //remember when deleting, all associated values get deleted.
         curr = next;
     }
     head = nullptr;
@@ -88,12 +97,36 @@ void NDLList<Object>::insert(const Object& obj, int index) {
 template <class Object>
 int NDLList<Object>::find(const Object& obj) const {
     // TODO: return the 0-based index of the first match, or -1.
+    int index = 0;
+    LListNode<Object>* curr = head;
+    while(curr != nullptr){
+        if(curr->item == obj) return index;
+        index++;
+        curr = curr->next;
+    }
     return -1;
 }
 
 template <class Object>
 void NDLList<Object>::remove(const Object& obj) {
     // TODO: unlink and delete the first node whose item == obj.
+    if(obj == nullptr) return;
+    if(head == nullptr) return; 
+    if(head->item == obj){
+        LListNode<Object>* temp = head->next;
+        delete head;
+        head = temp;
+        return;
+    }
+    LListNode<Object>* curr = head;
+    while(curr->next != nullptr){
+        if(curr->next->item == obj){
+            LListNode<Object>* temp = curr->next->next;
+            delete curr->next;
+            curr->next = temp;
+        }
+        curr = curr->next;
+    }
 }
 
 template <class Object>
