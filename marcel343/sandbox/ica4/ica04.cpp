@@ -1,3 +1,7 @@
+//I did end up adding code to main to add tests for erase, 
+//and I added printHorizontal to help me visualize during testing, 
+//making sure things were working as intended.
+
 // CSS 343 · ICA 04 — AVL trees.  Fill in the TODOs, then run the application.
 //
 //   build:        g++ -std=c++17 -g -o ica04 ica04.cpp
@@ -52,6 +56,7 @@ int bf(Node* t) {
 }
 void fix(Node* t) {
     // TODO: set t->height = 1 + max(height(t->left), height(t->right)).
+    //height is primarily managed through fix.
     if(!t) return;
     t->height = 1 + max(height(t->left), height(t->right));
 }
@@ -87,11 +92,18 @@ Node* rebalance(Node* t) {
     //   otherwise return t.
     fix(t);
     if(bf(t) > 1){
-        if(bf(t) < 0) { //LR rotation if true, other
+        if(bf(t->left) < 0) { //LR rotation if true, other
             t->left = rotateLeft(t->left);
         }
         return rotateRight(t);
     }
+    if(bf(t) < -1){
+        if(bf(t->right) > 0){ //RL rotation, RR if not.
+            t->right = rotateRight(t->right);
+        }
+        return rotateLeft(t);
+    }
+    //remember the above works because the scond balance factor tests which side the imbalance is on.
     return t;
 }
 
@@ -104,24 +116,77 @@ Node* insert(Node* t, int k) {
     if(t == nullptr) return new Node(k);
     
     if(k < t->key){
-        insert(t->left, k);
+        t->left = insert(t->left, k);
     }else if(k > t->key){
-        insert(t->right, k);
+        t->right = insert(t->right, k);
     }else return t;
 
-    
+    return rebalance(t);
     
 }
 
 // ---- TODO 5 — checks (stretch: also write erase with rebalancing) --------
 bool isAVL(Node* t) {
     // TODO: true if |bf(t)| <= 1 AND both subtrees are AVL (recursively).
+    return t == nullptr || (abs(bf(t)) <= 1 && isAVL(t->left) && isAVL(t->right));
     return true;
 }
 bool contains(Node* t, int k) {
     // TODO: standard BST search.
+    if(t == nullptr) return false;
+    if(t->key == k) return true;
+    if(k < t->key) return contains(t->left, k);
+    if(k > t->key) return contains(t->right, k);
     return false;
 }
+
+//Erase extra credit
+Node* erase(Node* t, int k) {
+    if(t == nullptr) return nullptr;
+
+    if(k < t->key){
+        t->left = erase(t->left, k);
+    }else if(k > t->key){
+        t->right = erase(t->right, k);
+    }else{
+        //found
+        if(t->left == nullptr && t->right == nullptr){
+            delete t;
+            return nullptr;
+        }else if(t->left == nullptr){
+            Node* temp = t->right;
+            delete t;
+            return temp;
+        }else if(t->right == nullptr){
+            Node* temp = t->left;
+            delete t;
+            return temp;
+        }else{
+            //go to the right and keep going left.
+            //basically like deleting the root of an avl tree and finding successor.
+            Node* temp = t->right;
+            while(temp->left != nullptr){
+                temp = temp->left;
+            }
+            t->key = temp->key; //just move the key up.
+            t->right = erase(t->right, temp->key); 
+        }
+    }
+    return rebalance(t);
+}
+
+//prints in reverse pre-order, used stack overflow to help me make this.
+//prints (height, balance factor)
+void printHorizontal(Node* t, int depth = 0) {
+    if (!t) return;
+    printHorizontal(t->right, depth + 1);
+    for (int i = 0; i < depth; ++i) {
+        cout << "    ";
+    }
+    cout << "> " << t->key << " (h:" << t->height << ", b:" << bf(t) << ")\n";
+    printHorizontal(t->left, depth + 1);
+}
+
 
 // ==========================================================================
 // UNIT TESTS + APPLICATION (given — do not edit).
@@ -135,6 +200,8 @@ static void check(bool ok, const string& what) {
 static Node* build(const vector<int>& ks) { Node* r = nullptr; for (int k : ks) r = insert(r, k); return r; }
 static bool sortedInorder(Node* t) { vector<int> v; inorder(t, v); return is_sorted(v.begin(), v.end()); }
 
+
+
 int main() {
     // -- T1: basics --------------------------------------------------------
     cout << "T1 · basics\n";
@@ -142,6 +209,7 @@ int main() {
     Node* one = build({42});
     check(one != nullptr && sizeOf(one) == 1 && height(one) == 0, "single insert: 1 node, height 0");
     check(contains(one, 42) && !contains(one, 7), "contains: hit and miss on 1 node");
+    cout << contains(one, 42) << endl;
     destroy(one);
 
     // -- T2..T5: one test per rotation case --------------------------------
@@ -202,8 +270,38 @@ int main() {
     check(sizeOf(rev) == N && height(rev) <= bound && isAVL(rev), "same guarantees on the mirror input");
     destroy(rev);
 
+
+    //T10 erase test
+    cout << "\n\nT10 erase test\n";
+    cout << "Tree before any issues, will print after erasing 2 and 8.\n";
+    Node* e = build({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15});
+    printHorizontal(e);
+    
+    e = erase(e, 1);
+    check(sizeOf(e) == 14 && !contains(e, 1), "Remove 1 leaf node");
+    check(isAVL(e), "Tree still AVL");
+    
+    e = erase(e, 2);
+    check(sizeOf(e) == 13 && !contains(e, 2), "Removing 2, check if 3 takes its place.");
+    check(isAVL(e), "Tree still AVL");
+    printHorizontal(e);
+    
+    
+    //9 should take 8's place.
+    cout << "Check below regarding this test, if 9 takes 8's place.\n";
+    e = erase(e, 8);
+    check(sizeOf(e) == 12 && !contains(e, 8), "Remove 8 (root)");
+    printHorizontal(e);
+    check(isAVL(e), "Tree Still AVL after delete w/ root");
+    printHorizontal(e);
+    
+    
+    destroy(e);
+
     cout << passCnt << " passed, " << failCnt << " failed"
          << (failCnt ? "" : "  —  now run it under valgrind (must be clean)") << '\n';
     return failCnt ? 1 : 0;
+
+
 }
 #endif
