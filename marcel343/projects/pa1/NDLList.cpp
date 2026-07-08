@@ -2,13 +2,13 @@
 // This file is #included at the bottom of NDLList.h. Do NOT compile it directly.
 // Compilable skeleton: every method has a stub so the project builds. Replace the
 // TODOs with real implementations. (Stubs intentionally leak / return defaults.)
-#include "NDLList.h"
+#include "NDLList.h" //comment on compile
 template <class Object>
 NDLList<Object>::NDLList() : head(nullptr) {}
 
 template <class Object>
 NDLList<Object>::NDLList(const NDLList& rhs) : head(nullptr) {
-    if(rhs == nullptr) return;
+    if(rhs.head == nullptr) return;
     head = new LListNode<Object>{rhs.head->item, nullptr};
 
     LListNode<Object>* rcurr = rhs.head->next;
@@ -29,7 +29,7 @@ template <class Object>
 const NDLList<Object>& NDLList<Object>::operator=(const NDLList& rhs) {
     if(rhs == this) return *this;
     clear();
-    if(rhs == nullptr) return;
+    if(rhs.head == nullptr) return *this;
     head = new LListNode<Object>{rhs.head->item, nullptr};
 
     LListNode<Object>* rcurr = rhs.head->next;
@@ -110,7 +110,7 @@ int NDLList<Object>::find(const Object& obj) const {
 template <class Object>
 void NDLList<Object>::remove(const Object& obj) {
     // TODO: unlink and delete the first node whose item == obj.
-    if(obj == nullptr) return;
+    //if(obj == nullptr) return;
     if(head == nullptr) return; 
     if(head->item == obj){
         LListNode<Object>* temp = head->next;
@@ -132,5 +132,11 @@ void NDLList<Object>::remove(const Object& obj) {
 template <class Object>
 Object NDLList<Object>::retrieve(int index) const {
     // TODO: return the item at index (you may assume a valid index).
-    return Object{};
+    if(head == nullptr) return Object{};
+    
+    LListNode<Object>* curr = head;
+    for(int i = 0; i < index; i++){
+        curr = curr->next;
+    }
+    return curr->item;
 }
