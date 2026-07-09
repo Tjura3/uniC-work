@@ -31,5 +31,5 @@ private:
     DLListNode<Object>* header;                     // dummy header (sentinel)
 };
 
-#include "CDLList.cpp"   // template implementation lives in the .cpp; do NOT compile it separately
+//#include "CDLList.cpp"   // template implementation lives in the .cpp; do NOT compile it separately //uncomment on compile
 #endif

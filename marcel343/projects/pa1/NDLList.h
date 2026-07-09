@@ -29,5 +29,5 @@ private:
     LListNode<Object>* head;                        // first real node (no dummy)
 };
 
-//#include "NDLList.cpp"   // template implementation lives in the .cpp; do NOT compile it separately //uncomment on compile
+#include "NDLList.cpp"   // template implementation lives in the .cpp; do NOT compile it separately //uncomment on compile
 #endif
