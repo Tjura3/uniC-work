@@ -27,7 +27,7 @@ NDLList<Object>::~NDLList() {
 
 template <class Object>
 const NDLList<Object>& NDLList<Object>::operator=(const NDLList& rhs) {
-    if(rhs == this) return *this;
+    if(&rhs == this) return *this;
     clear();
     if(rhs.head == nullptr) return *this;
     head = new LListNode<Object>{rhs.head->item, nullptr};
@@ -124,6 +124,7 @@ void NDLList<Object>::remove(const Object& obj) {
             LListNode<Object>* temp = curr->next->next;
             delete curr->next;
             curr->next = temp;
+            return;
         }
         curr = curr->next;
     }
