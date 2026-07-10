@@ -29,7 +29,7 @@ void doublingTest(const string& name) {
     cout << "\n=== " << name << " — insert at HEAD ===\n";
     cout << setw(8) << "N" << setw(12) << "time(ms)" << setw(9) << "ratio" << "\n";
     double prev = 0;
-    for (int N = 1000; N <= 64000; N += N) {
+    for (int N = 1000; N <= 32000; N += N) {
         double ms = timeIt([&]() {
             ListType list;
             for (int i = 0; i < N; ++i) list.insert(0, 0);   // TODO: try index N (tail) too
@@ -48,7 +48,7 @@ void tailDoublingTest(const string& name) {
     cout << "\n=== " << name << " — insert at TAIL ===\n";
     cout << setw(8) << "N" << setw(12) << "time(ms)" << setw(9) << "ratio" << "\n";
     double prev = 0;
-    for (int N = 1000; N <= 64000; N += N) {
+    for (int N = 1000; N <= 32000; N += N) {
         double ms = timeIt([&]() {
             ListType list;
             for (int i = 0; i < N; ++i) list.insert(0, list.size());   // TODO: try index N (tail) too
