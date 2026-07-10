@@ -39,6 +39,50 @@ void runTests(const string& name, T a, T b, T c) {
     list.remove(a);
     cout << "original after remove: "; printList(list);
     cout << "copy (should be unchanged): "; printList(copy);
+
+    
+    
+
+    //my tests for the most part now.
+    cout << endl << "____My tests___________________________________________" <<endl;
+
+    cout << "___non-existant find (find a): " << list.find(a) << endl;
+    cout << "___out of bounds retrieve test: " << list.retrieve(0) << " " << list.retrieve(1) << " " << list.retrieve(2) << "\n";
+    //it looks different on CDLList because I was never told in the assignment at all if it had to circle or not.
+
+    copy.clear();
+    list.clear();
+    cout << "___clear test, list + copy: " << list.isEmpty() << ", " << copy.isEmpty() << endl;
+    
+    //safe remove
+    cout << "___Attempting to remove non-existant value\n";
+    list.remove(c);
+    printList(list);
+
+    cout << "___Self assignment test\n";
+    list.insert(a, 0);
+    list.insert(a, 0);
+    list.insert(b, 0);
+    list.insert(c, 0);
+    cout << "Origional: ";
+    printList(list);
+    copy = list;
+    cout << "Copy: ";
+    printList(copy);
+    copy = copy;
+    cout << "Copy = Copy: ";
+    printList(copy);
+
+    cout << "___Inserting at head, middle, and tail:    ";
+    T d = T{};
+    list.insert(d, 0);
+    list.insert(d, list.size());
+    list.insert(d, list.size()/2);
+    printList(list);
+    
+    //cout << sizeof(list.retrieve(1));
+    
+
 }
 
 int main() {

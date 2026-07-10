@@ -3,7 +3,7 @@
 // Compilable skeleton: the constructor builds a valid empty circular list with a
 // dummy header; the rest are stubs for you to implement.
 
-#include "CDLList.h" //why is this not in here and in the .h? //comment on compile.
+//#include "CDLList.h" //why is this not in here and in the .h? //comment on compile.
 
 template <class Object>
 CDLList<Object>::CDLList() {
@@ -106,25 +106,32 @@ void CDLList<Object>::insert(const Object& obj, int index) {
     //after messing with them in sandbox, negative_index % size = negative number
     //so add size to find the real index, and modulo that whole thing to get it account for positive numbers
 
-    int size = size();
+    int siz = size();
     //also if size is just at the head just make index 0 and I think that works?
-    if(size == 0){
+    if(siz == 0){
         index = 0;
-    }else{
-        index = ((index % size) + size) % size;
+    }else if(index < 0 || index > siz){
+        index = ((index % siz) + siz) % siz;
     }
+
     DLListNode<Object>* ins = new DLListNode<Object>{obj, nullptr, nullptr}; //item, prev, next
-    DLListNode<Object>* temp = header->next; 
-    while(index != 0){
-        temp = temp->next;
-        index--;
+    DLListNode<Object>* temp = nullptr;
+    if(index == siz){
+        temp = header;
+    }else{
+        temp = header->next;
+        while(index != 0){
+            temp = temp->next;
+            index--;
+        }   
     }
+    
     ins->next = temp;
     ins->prev = temp->prev;
     temp->prev->next = ins;
     temp->prev = ins;
 }
-//check
+
 template <class Object>
 int CDLList<Object>::find(const Object& obj) const {
     // TODO: return the 0-based index of the first match, or -1.
@@ -133,6 +140,7 @@ int CDLList<Object>::find(const Object& obj) const {
     while(curr != header){
         if(curr->item == obj) return index;
         index++;
+        curr = curr->next;
     }
     //curr equals header
     return -1;
@@ -147,17 +155,22 @@ void CDLList<Object>::remove(const Object& obj) {
             curr->prev->next = curr->next;
             curr->next->prev = curr->prev;
             delete curr;
+            return;
         }     
+        curr = curr->next;
     }
 }
-//check
+
 template <class Object>
 Object CDLList<Object>::retrieve(int index) const {
     // TODO: return the item at index.
     //does this mean that 0 should return the head?
     //ill just say no and copy what I did with insert.
+    //aaand I way overengineered this... cause we could assume valid indexes.
     
-    index = ((index % size) + size) % size; //if index is 0, its still 0.
+    int siz = size();
+    if (siz == 0) return Object{};
+    index = ((index % siz) + siz) % siz; //if index is 0, its still 0.
     DLListNode<Object>* curr = header->next; 
     while(index != 0){
         curr = curr->next;

@@ -52,13 +52,13 @@ template <class Object>
 int NDLList<Object>::size() const {
     // TODO: count the nodes.
     //assuming 1 = 1 node
-    int size = 0;
+    int siz = 0;
     LListNode<Object>* curr = head;
     while(curr != nullptr){
-        size++;
+        siz++;
         curr = curr->next;
     }
-    return size;
+    return siz;
 }
 
 template <class Object>
@@ -75,7 +75,7 @@ void NDLList<Object>::clear() {
 
 template <class Object>
 void NDLList<Object>::insert(const Object& obj, int index) {
-    if(index < 0) return;
+    if(index < 0 || index > size()) return;
     
     LListNode<Object>* ins = new LListNode<Object>{obj, nullptr};
     
@@ -133,11 +133,13 @@ void NDLList<Object>::remove(const Object& obj) {
 template <class Object>
 Object NDLList<Object>::retrieve(int index) const {
     // TODO: return the item at index (you may assume a valid index).
+    //yeaaahhhh part 3 says we have to add handling for that, so idk, Im not sure.
     if(head == nullptr) return Object{};
     
     LListNode<Object>* curr = head;
-    for(int i = 0; i < index; i++){
+    for(int i = 0; i < index && curr != nullptr; i++){
         curr = curr->next;
     }
+    if(curr == nullptr) return Object{};
     return curr->item;
 }

@@ -29,7 +29,7 @@ void doublingTest(const string& name) {
     cout << "\n=== " << name << " — insert at HEAD ===\n";
     cout << setw(8) << "N" << setw(12) << "time(ms)" << setw(9) << "ratio" << "\n";
     double prev = 0;
-    for (int N = 1000; N <= 16000; N += N) {
+    for (int N = 1000; N <= 64000; N += N) {
         double ms = timeIt([&]() {
             ListType list;
             for (int i = 0; i < N; ++i) list.insert(0, 0);   // TODO: try index N (tail) too
@@ -42,9 +42,31 @@ void doublingTest(const string& name) {
     // where NDLList and CDLList differ — and explain why in your report.
 }
 
+//the second experiment
+template <class ListType>
+void tailDoublingTest(const string& name) {
+    cout << "\n=== " << name << " — insert at TAIL ===\n";
+    cout << setw(8) << "N" << setw(12) << "time(ms)" << setw(9) << "ratio" << "\n";
+    double prev = 0;
+    for (int N = 1000; N <= 64000; N += N) {
+        double ms = timeIt([&]() {
+            ListType list;
+            for (int i = 0; i < N; ++i) list.insert(0, list.size());   // TODO: try index N (tail) too
+        });
+        cout << setw(8) << N << setw(12) << fixed << setprecision(2) << ms
+             << setw(9) << (prev ? ms / prev : 0.0) << "\n";
+        prev = ms;
+    }
+    
+}
+
+
 int main() {
     cout << "Doubling experiment — note the ratio, not the raw time.\n";
     doublingTest<NDLList<int>>("NDLList<int>");
     doublingTest<CDLList<int>>("CDLList<int>");
+    
+    tailDoublingTest<NDLList<int>>("NDLList<int>");
+    tailDoublingTest<CDLList<int>>("CDLList<int>");
     return 0;
 }
