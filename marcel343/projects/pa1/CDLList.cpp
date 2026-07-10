@@ -89,21 +89,79 @@ void CDLList<Object>::insert(const Object& obj, int index) {
     // TODO: splice a new node into the doubly linked ring at the given index.
     //assuming 0 is the head
     
-}
+    //handling negative index
+    // if(index < 0){
+    //     int size = size();
+    //     while(index < 0){
+    //         index = index - size;
+    //     }
+    // }
 
+    //and now the index should either be 0 or a positive number
+    //0 inserts in header's next
+    //I imagine header is skipped over?
+    //like a list of 3 and I insert at 5, I am dealing with headder and lets say 1 2 and 3
+    //it goes to 1, 2, 3, skip headder, 1, insert at 2?
+    //stop overthinking, just use modulos to figure out the index.
+    //after messing with them in sandbox, negative_index % size = negative number
+    //so add size to find the real index, and modulo that whole thing to get it account for positive numbers
+
+    int size = size();
+    //also if size is just at the head just make index 0 and I think that works?
+    if(size == 0){
+        index = 0;
+    }else{
+        index = ((index % size) + size) % size;
+    }
+    DLListNode<Object>* ins = new DLListNode<Object>{obj, nullptr, nullptr}; //item, prev, next
+    DLListNode<Object>* temp = header->next; 
+    while(index != 0){
+        temp = temp->next;
+        index--;
+    }
+    ins->next = temp;
+    ins->prev = temp->prev;
+    temp->prev->next = ins;
+    temp->prev = ins;
+}
+//check
 template <class Object>
 int CDLList<Object>::find(const Object& obj) const {
     // TODO: return the 0-based index of the first match, or -1.
+    DLListNode<Object>* curr = header->next;
+    int index = 0;
+    while(curr != header){
+        if(curr->item == obj) return index;
+        index++;
+    }
+    //curr equals header
     return -1;
 }
-
+//check
 template <class Object>
 void CDLList<Object>::remove(const Object& obj) {
     // TODO: unlink (fix prev/next) and delete the first matching data node.
+    DLListNode<Object>* curr = header->next;
+    while(curr != header){
+        if(curr->item == obj){
+            curr->prev->next = curr->next;
+            curr->next->prev = curr->prev;
+            delete curr;
+        }     
+    }
 }
-
+//check
 template <class Object>
 Object CDLList<Object>::retrieve(int index) const {
     // TODO: return the item at index.
-    return Object{};
+    //does this mean that 0 should return the head?
+    //ill just say no and copy what I did with insert.
+    
+    index = ((index % size) + size) % size; //if index is 0, its still 0.
+    DLListNode<Object>* curr = header->next; 
+    while(index != 0){
+        curr = curr->next;
+        index--;
+    }
+    return curr->item;
 }
