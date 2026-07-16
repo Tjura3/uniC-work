@@ -31,6 +31,25 @@ int hashCode(int key, int M) { return key % M; }
 // Every rehashed key must land on a valid probe chain from its NEW home slot.
 void resize(HashTable& h) {
     // TODO — L07's "resize + rehash" demo shows exactly this move.
+    vector<int> old = h.slots; 
+    //This is an O(n) operation,
+    //I wish I knew a better way to extract information out of this 
+    //but I just don't know it.
+    int oldcap = h.M;
+    h.n = 0;
+    h.M = oldcap*2;
+    h.slots.assign(h.M, EMPTY);
+    for(int i = 0; i < oldcap; i++){
+        int key = old[i];
+        if(key != EMPTY){
+            int idx = hashCode(key, h.M); //idx = index
+            while(h.slots[idx] != EMPTY){
+                idx = (idx + 1) % h.M;
+            }
+            h.slots[idx] = key;
+            h.n++;
+        }
+    }
 }
 
 // ---- TODO 2 — insert ------------------------------------------------------
@@ -38,6 +57,16 @@ void resize(HashTable& h) {
 // successful insert, resize when the load factor reaches 1/2 (2*h.n >= h.M).
 void insert(HashTable& h, int key) {
     // TODO — the L07 "linear probing" demo is this loop; mind the wraparound.
+    int idx = hashCode(key, h.M); //idx = index
+    while(h.slots[idx] != EMPTY){
+        if(h.slots[idx] == key) return;
+        idx = (idx + 1) % h.M;
+    }
+    h.slots[idx] = key;
+    h.n++;
+    if(2*h.n >= h.M){
+        resize(h);
+    }
 }
 
 // ---- TODO 3 — search -------------------------------------------------------
@@ -45,6 +74,11 @@ void insert(HashTable& h, int key) {
 // safe? (L07 "search hit vs miss".)
 bool search(const HashTable& h, int key) {
     // TODO
+    int idx = hashCode(key, h.M);
+    while(h.slots[idx] != EMPTY){
+        if(h.slots[idx] == key) return true;
+        idx = (idx + 1) % h.M;
+    }
     return false;
 }
 
