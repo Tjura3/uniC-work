@@ -74,7 +74,31 @@ vector<int> bfs(const Graph& g, int s) {
 // Return the order (its size is < V when the graph has a cycle).
 vector<int> topoSort(const Graph& g) {
     // TODO — the header is Kahn's algorithm in words (L08 "Kahn's algorithm").
-    return {};
+    vector<int> deg(g.V, 0);
+    vector<int> sort;
+    queue<int> q;
+    
+    for(int y = 0; y < g.V; y++){
+        for(int v : g.adj[y]){
+            deg[v]++;
+        }
+    }
+    //thomas, the first vector is the node, the inner vector is the values they point to.
+    for(int i = 0; i < g.V; i++){ 
+        if(deg[i] == 0) q.push(i);
+    }
+    while(!q.empty()){
+        int u = q.front();
+        q.pop();
+        sort.push_back(u);
+        for(int v : g.adj[u]){
+            deg[v]--;
+            if(deg[v] == 0){
+                q.push(v); //push the sorce node.
+            }
+        }
+    }
+    return (sort.size() == g.V) ? sort : vector<int>{};
 }
 
 // ==========================================================================
