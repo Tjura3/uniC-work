@@ -24,7 +24,7 @@ enum class Mode { VANILLA, AVL, REDBLACK };
 
 class BinTree {
 public:
-    explicit BinTree(Mode m = Mode::VANILLA);
+    explicit BinTree(Mode m = Mode::    VANILLA);
     BinTree(const BinTree& other);              // deep copy (mode and counters too)
     ~BinTree();                                 // no leaks
     BinTree& operator=(const BinTree& other);   // deep assign (watch self-assignment)

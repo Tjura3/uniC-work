@@ -32,7 +32,11 @@ void BinTree::displayRec(Node* t, const string& tag, int depth) {
 }
 
 // ---- TODO 1 — construction, destruction, deep copy --------------------------
-BinTree::BinTree(Mode m) : root(nullptr), mode_(m) {}
+BinTree::BinTree(Mode m) : root(nullptr), mode_(m) {
+    if(m::VANILLA){
+        
+    }
+}
 
 BinTree::BinTree(const BinTree& other) : root(nullptr), mode_(other.mode_) {
     // TODO: deep-copy other's tree (copy height/red fields too) + the counters
