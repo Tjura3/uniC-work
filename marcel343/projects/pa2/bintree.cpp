@@ -36,30 +36,62 @@ BinTree::BinTree(Mode m) : root(nullptr), mode_(m) {}
 
 BinTree::BinTree(const BinTree& other) : root(nullptr), mode_(other.mode_) {
     // TODO: deep-copy other's tree (copy height/red fields too) + the counters
-    mode_ = other.mode_;
     rot_ = other.rot_;
     flips_ = other.flips_;
     auxBytes_ = other.auxBytes_;
-
-    //(void)other;
+    root = copyOther(other.root);
 }
+
+BinTree::Node* BinTree::copyOther(const Node* curr){
+    if(!curr){
+        return nullptr;
+    }
+    BinTree::Node* newNode = new BinTree::Node();
+    newNode->key = curr->key;
+    newNode->height = curr->height;
+    newNode->red = curr->red;
+    newNode->left = copyOther(curr->left);
+    newNode->right = copyOther(curr->right);
+    return newNode;
+}
+
+
 
 BinTree::~BinTree() {
     // TODO: delete every node (post-order)
+    destroy(root);
 }
+void BinTree::destroy(Node* curr){
+    if(!curr) return;
+    destroy(curr->left);
+    destroy(curr->right);
+    delete curr;
+}
+
 
 BinTree& BinTree::operator=(const BinTree& other) {
     // TODO: guard self-assignment; free the current tree; deep-copy other's
     //       tree, mode, and counters
-    (void)other;
+    if(this == &other) return *this;
+    destroy(root);
+    rot_ = other.rot_;
+    flips_ = other.flips_;
+    auxBytes_ = other.auxBytes_;
+    root = copyOther(other.root);
     return *this;
 }
 
 // ---- TODO 2 — comparison ------------------------------------------------------
 bool BinTree::operator==(const BinTree& other) const {
     // TODO: same keys AND same structure, in lockstep (ignore mode/colors/heights)
-    (void)other;
-    return false;
+    if(this == &other) return true;    
+    return snkEqual(root, other.root);
+}
+bool BinTree::snkEqual(const Node* a, const Node* b) const{ //structure and key equal
+    if((a == nullptr) && (b == nullptr)) return true;
+    if((a == nullptr) || (b == nullptr)) return false;
+    if(a->key != b->key) return false;
+    return snkEqual(a->left, b->left) && snkEqual(a->right, b->right);
 }
 bool BinTree::operator!=(const BinTree& other) const { return !(*this == other); }
 

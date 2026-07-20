@@ -89,5 +89,8 @@ private:
     // TODO: declare your recursive helpers here (static is fine). You will want
     // at least: copy, destroy, structural-equality, per-mode insert fix-ups,
     // Hibbard remove, in-order collect, and the balanced rebuild for mergeWith.
+    Node* copyOther(const Node* curr);
+    void destroy(Node* curr);
+    bool snkEqual(const Node* a, const Node* b) const; //structure and key equal
 };
 #endif
