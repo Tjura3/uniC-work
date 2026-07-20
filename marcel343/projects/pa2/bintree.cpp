@@ -88,8 +88,8 @@ bool BinTree::operator==(const BinTree& other) const {
     return snkEqual(root, other.root);
 }
 bool BinTree::snkEqual(const Node* a, const Node* b) const{ //structure and key equal
-    if((a == nullptr) && (b == nullptr)) return true;
-    if((a == nullptr) || (b == nullptr)) return false;
+    if((a == nullptr) && (b == nullptr)) return true; //nullptr
+    if((a == nullptr) || (b == nullptr)) return false; //one nullptr other not
     if(a->key != b->key) return false;
     return snkEqual(a->left, b->left) && snkEqual(a->right, b->right);
 }
