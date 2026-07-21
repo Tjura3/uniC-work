@@ -102,7 +102,7 @@ long BinTree::colorFlips() const { return flips_; }
 long BinTree::mergeAuxBytes() const { return auxBytes_; }
 
 bool BinTree::isEmpty() const {
-    return true;   // TODO
+    return root == nullptr;
 }
 int BinTree::size() const {
     return 0;      // TODO
