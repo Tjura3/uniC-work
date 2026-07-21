@@ -74,6 +74,7 @@ BinTree& BinTree::operator=(const BinTree& other) {
     //       tree, mode, and counters
     if(this == &other) return *this;
     destroy(root);
+    mode_ = other.mode_;
     rot_ = other.rot_;
     flips_ = other.flips_;
     auxBytes_ = other.auxBytes_;
@@ -105,15 +106,34 @@ bool BinTree::isEmpty() const {
     return root == nullptr;
 }
 int BinTree::size() const {
-    return 0;      // TODO
+    //return 0;      // TODO
+    return nodeCount(root);
+}
+int BinTree::nodeCount(const Node* curr) const{
+    if(!curr) return 0;
+    return 1 + nodeCount(curr->left) + nodeCount(curr->right);
 }
 int BinTree::treeHeight() const {
-    return 0;      // TODO: #nodes on the longest root-to-leaf path (empty = 0)
+    // TODO: #nodes on the longest root-to-leaf path (empty = 0)
+    return tHeight(root);
+}
+int BinTree::tHeight(const Node* curr) const{
+    if(!curr) return 0;
+    return 1 + max(tHeight(curr->left), tHeight(curr->right));
 }
 bool BinTree::contains(int key) const {
-    (void)key;
-    return false;  // TODO: iterative BST search
+    //(void)key;
+    //return false;  // TODO: iterative BST search
+    //iterations = loops not recursion.
+    Node* curr = root;
+    while(curr != nullptr){
+        if(key == curr->key) return true;
+        else if(key < curr->key) curr = curr->left;
+        else curr = curr->right;
+    }
+    return false;
 }
+
 
 // ---- TODO 4 — insert, per mode -----------------------------------------------------
 bool BinTree::insert(int key) {
@@ -125,8 +145,130 @@ bool BinTree::insert(int key) {
     //              rotate-left / rotate-right / flip-colors as the three ifs
     //              require (count rotations in rot_, flips in flips_);
     //              finally force the root black
-    (void)key;
-    return false;
+    //(void)key;
+    //return false;
+    bool inserted = false;
+    if(mode_ == Mode::VANILLA) root = insVanilla(root, key, inserted);
+    else if(mode_ == Mode::AVL) root = insAVL(root, key, inserted);
+    else{
+        root = insRB(root, key, inserted);
+        if(root) root->red = false;
+    }
+    return inserted;
+}
+BinTree::Node* BinTree::insVanilla(Node* curr, int key, bool& inserted){
+    if(!curr){
+        inserted = true;
+        return new Node{key};
+    }
+    if(key < curr->key){
+        curr->left = insVanilla(curr->left, key, inserted);
+    }else if(key > curr->key){
+        curr->right = insVanilla(curr->right, key, inserted);
+    }else inserted = false;
+    return curr;
+}
+BinTree::Node* BinTree::insAVL(Node* curr, int key, bool& inserted){
+    if(!curr){
+        inserted = true;
+        return new Node{key, nullptr, nullptr, 1}; //setting leaves to 1 this time.
+    }
+    if(key < curr->key){
+        curr->left = insAVL(curr->left, key, inserted);
+    }else if(key > curr->key){
+        curr->right = insAVL(curr->right, key, inserted);
+    }else {
+        inserted = false;
+        return curr;
+    }
+    return rebalance(curr);
+}
+BinTree::Node* BinTree::insRB(Node* curr, int key, bool& inserted){
+    if(!curr){
+        inserted = true;
+        return new Node{key, nullptr, nullptr, 0, true};
+    }
+    if(key < curr->key){
+        curr->left = insRB(curr->left, key, inserted);
+    }else if(key > curr->key){
+        curr->right = insRB(curr->right, key, inserted);
+    }else {
+        inserted = false;
+        return curr;
+    }
+    if(isRed(curr->right) && !isRed(curr->left)) curr = RL(curr);
+    if(isRed(curr->left) && isRed(curr->left->left)) curr = RR(curr);
+    if(isRed(curr->left) && isRed(curr->right)) flipC(curr);
+    return curr;
+}
+
+//Rotations
+BinTree::Node* BinTree::RL(Node* x){
+    rot_++;
+    Node* y = x->right;
+    Node* temp = y->left;
+    y->left = x;
+    x->right = temp;
+    if(mode_ == Mode::REDBLACK){
+        y->red = x->red;
+        x->red = true;
+    }else{
+        fix(x);
+        fix(y);
+    }
+    return y;
+}
+BinTree::Node* BinTree::RR(Node* y){
+    rot_++;
+    Node* x = y->left;
+    Node* temp = x->right;
+    x->right = y;
+    y->left = temp;
+    if(mode_ == Mode::REDBLACK){
+        x->red = y->red;
+        y->red = true;
+    }else{
+        fix(y);
+        fix(x);
+    }
+    return x;
+}
+
+//AVL tree helpers
+int BinTree::nheight(Node* n) const { return n ? n->height : 0; }
+void BinTree::fix(Node* n){
+    if(!n) return;
+    n->height = 1 + max(nheight(n->left), nheight(n->right));
+}
+int BinTree::bf(Node* n){
+    if(!n) return 0;
+    return nheight(n->left) - nheight(n->right);
+}
+BinTree::Node* BinTree::rebalance(Node* n) {
+    fix(n);
+    if(bf(n) > 1){
+        if(bf(n->left) < 0) { //LR rotation if true, other
+            n->left = RL(n->left);
+        }
+        return RR(n);
+    }
+    if(bf(n) < -1){
+        if(bf(n->right) > 0){ //RL rotation, RR if not.
+            n->right = RR(n->right);
+        }
+        return RL(n);
+    }
+    return n;
+}
+//RB tree helpers
+bool BinTree::isRed(const Node* n) const{
+    return n ? n->red : false;
+}
+void BinTree::flipC(Node* n){
+    flips_++;
+    n->red = !n->red; //I just find the syntax funny.
+    if (n->left)  n->left->red  = !n->left->red;
+    if (n->right) n->right->red = !n->right->red;
 }
 
 // ---- TODO 5 — remove (VANILLA only) --------------------------------------------------

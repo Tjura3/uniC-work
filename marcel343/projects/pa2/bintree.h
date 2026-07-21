@@ -92,5 +92,26 @@ private:
     Node* copyOther(const Node* curr);
     void destroy(Node* curr);
     bool snkEqual(const Node* a, const Node* b) const; //structure and key equal
+    //todo3
+    int nodeCount(const Node* curr) const;
+    int tHeight(const Node* curr) const;
+    //loops. not recursion.
+    //bool cont(const Node* curr, int key) const;
+
+    //TODO4
+    Node* insVanilla(Node* curr, int key, bool& inserted);
+    Node* insAVL(Node* curr, int key, bool& inserted);
+    Node* insRB(Node* curr, int key, bool& inserted);
+
+    Node* RL(Node* x);
+    Node* RR(Node* y);
+    int nheight(Node* n) const;
+    void fix(Node* n);
+    int bf(Node* n);
+    Node* rebalance(Node* n);
+
+    bool isRed(const Node* n) const;
+    void flipC(Node* n);
+
 };
 #endif
