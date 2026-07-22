@@ -152,7 +152,7 @@ bool BinTree::insert(int key) {
     else if(mode_ == Mode::AVL) root = insAVL(root, key, inserted);
     else{
         root = insRB(root, key, inserted);
-        if(root) root->red = false;
+        if(root) root->red = false; 
     }
     return inserted;
 }
@@ -276,14 +276,57 @@ bool BinTree::remove(int key) {
     // TODO: if mode_ != Mode::VANILLA return false (leave the tree unchanged).
     //       Otherwise Hibbard: leaf → unlink; one child → splice; two children
     //       → copy the in-order successor's key down, remove the successor.
-    (void)key;
-    return false;
+    //(void)key;
+    //return false;
+    if(mode_ != Mode::VANILLA){
+        return false;
+    }
+    bool rm = false;
+    root = rmRecurse(root, key, rm);
+    return rm;
 }
-
+BinTree::Node* BinTree::rmRecurse(Node* curr, int key, bool& rm){
+    if(!curr){
+        rm = false;
+        return nullptr;
+    }
+    if(key < curr->key){
+        curr->left = rmRecurse(curr->left, key, rm);
+    }else if(key > curr->key){
+        curr->right = rmRecurse(curr->right, key, rm);
+    }else{
+        rm = true;
+        if(!curr->left){ //right child
+            Node* temp = curr->right;
+            delete curr;
+            return temp;
+        }else if(!curr->right){
+            Node* temp = curr->left;
+            delete curr;
+            return temp;
+        }else{
+            Node* temp = curr->right;
+            while(temp->left != nullptr){
+                temp = temp->left;
+            }
+            curr->key = temp->key;
+            bool work;
+            curr->right = rmRecurse(curr->right, temp->key, work);
+        }
+    }
+    return curr;
+} 
 // ---- TODO 6 — flatten + merge ----------------------------------------------------------
 void BinTree::toSortedArray(vector<int>& out) const {
     // TODO: in-order walk, push_back each key (do not modify the tree)
-    (void)out;
+    //(void)out;
+    inOrderVector(root, out);
+}
+void BinTree::inOrderVector(Node* curr, vector<int>& out) const{
+    if(!curr) return;
+    inOrderVector(curr->left, out);
+    out.push_back(curr->key);
+    inOrderVector(curr->right, out);
 }
 
 void BinTree::mergeWith(const BinTree& other) {
@@ -291,13 +334,29 @@ void BinTree::mergeWith(const BinTree& other) {
     //       Remember: set auxBytes_ to the peak heap bytes you allocated
     //       (count vector capacities, explicit stacks, and every new Node);
     //       keep `other` unchanged; handle mergeWith(*this).
-    (void)other;
+    //(void)other;
+    if (this == &other || other.isEmpty()) {
+        auxBytes_ = 0;
+        return;
+    }
+    vector<int> v;
+    other.toSortedArray(v);
+    auxBytes_ = v.capacity() * sizeof(int);
+    for(int val : v){
+        insert(val);
+    }
+    //simple but... does this work?
 }
 
 // ---- TODO 7 — in-order print --------------------------------------------------------------
 ostream& operator<<(ostream& os, const BinTree& t) {
     // TODO: in-order traversal, each key followed by one space, then a newline
-    (void)t;
+    //(void)t;
+    vector<int> v;
+    t.toSortedArray(v);
+    for(int val: v){
+        os << val << " ";
+    }
     os << '\n';
     return os;
 }

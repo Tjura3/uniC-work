@@ -113,5 +113,12 @@ private:
     bool isRed(const Node* n) const;
     void flipC(Node* n);
 
+    //TODO5
+    Node* rmRecurse(Node* curr, int key, bool& rm);
+
+    //TODO6
+    void inOrderVector(Node* curr, vector<int>& out) const;
+    
+
 };
 #endif
