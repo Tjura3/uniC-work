@@ -41,7 +41,19 @@ using MinPQ = priority_queue<Node*, vector<Node*>, Cmp>;
 Node* buildHuffman(const vector<pair<char, int>>& freqs) {
     // TODO — the header is the whole algorithm in words; the L12 "Huffman —
     //        the algorithm" slide has the pseudocode. MinPQ above is your heap.
-    return nullptr;
+    //return nullptr;
+    MinPQ pq;
+    for(auto [sym, f] : freqs){
+        pq.push(new Node{f, sym});
+    }
+    while(pq.size() > 1){
+        Node* x = pq.top();
+        pq.pop();
+        Node* y = pq.top();
+        pq.pop();
+        pq.push(new Node{x->freq + y->freq, x, y});
+    }
+    return pq.top();
 }
 
 // ---- TODO 2 — extractCodes -------------------------------------------------
@@ -51,6 +63,13 @@ Node* buildHuffman(const vector<pair<char, int>>& freqs) {
 void extractCodes(Node* node, const string& path, map<char, string>& codes) {
     // TODO — a short recursive walk; the header states the leaf rule and the
     //        single-leaf edge case. (L12 "reading the codes off the tree".)
+    if(!node) return;
+    if(!node->left && !node->right){
+        codes[node->sym] = path.empty() ? "0" : path;
+        return;
+    }
+    extractCodes(node->left, path + "0", codes);
+    extractCodes(node->right, path + "1", codes);
 }
 
 // ==========================================================================
