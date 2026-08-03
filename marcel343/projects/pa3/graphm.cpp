@@ -10,8 +10,35 @@ int GraphM::buildGraph(ifstream& file) {
     //       then read "from to cost" triples via insertEdge until a line
     //       starting with 0. LEAVE THE STREAM after that terminator line —
     //       the file may hold another graph.
-    (void)file;
-    return -1;
+    //(void)file;
+    //return -1;
+
+    int n = 0; //amount of vertacies
+    if(!(file >> n) || n <= 0) return -1; //fail is negative 1
+    size = n;
+
+    vertices.assign(size + 1, "");
+    adjM.assign(size + 1, vector<int>(size + 1, INF));
+    pathM.assign(size + 1, vector<TableType>(size + 1));
+
+    n = 1;
+    getline(file, vertices[n]); //to clear the first line
+    while(n <= size){
+        getline(file, vertices[n]);
+        n++;
+    }
+
+    int from = 0;
+    int to = 0;
+    int cost = 0;
+    while(file >> from && from != 0){
+        file >> to;
+        file >> cost;
+        insertEdge(from, to, cost);
+    }
+    getline(file, vertices[0]);
+    vertices[0] = "";
+    
 }
 
 int GraphM::insertEdge(int from, int to, int cost) {
