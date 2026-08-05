@@ -150,6 +150,16 @@ void GraphM::displayAllPaths() const {
     }
 }
 
+void GraphM::pathRecurseNames(int src, int des) const{
+    if(src == des){
+        cout << vertices[src] << endl;
+        return;
+    }
+    int prev = pathM[src][des].prev_node;
+    if(prev == 0) return;
+    pathRecurseNames(src, prev);
+    cout << vertices[des] << endl;
+}
 void GraphM::displayPath(int src, int dest) const {
     // TODO: the same one-line format, then each path vertex's NAME on its own
     //       line, then a blank line (see expected-output.txt)
@@ -157,7 +167,10 @@ void GraphM::displayPath(int src, int dest) const {
     cout << "    " << right << setw(3) << src << setw(5) << dest;
     if(pathM[src][dest].dist == INF){
         cout << setw(10) << "---" << endl;
+        return;
     }else{
         cout << setw(10) << pathM[src][dest].dist << "  " << left << getPath(src, dest) << endl;
     }
+    pathRecurseNames(src, dest);
+    cout << endl;
 }

@@ -42,5 +42,6 @@ private:
     int size = 0;
     // TODO: declare your helpers (path reconstruction wants a recursive one)
     string pathRecurse(int src, int des) const;
+    void pathRecurseNames(int src, int des) const;
 };
 #endif

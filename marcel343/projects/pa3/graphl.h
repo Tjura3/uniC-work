@@ -46,5 +46,7 @@ private:
     GraphNode* nodeArray = nullptr;             // [1..size]; slot 0 unused
     int size = 0;
     // TODO: declare your helpers (a clear() for the destructor, a visited reset)
+    void clear();
+    void clearVisited();
 };
 #endif
