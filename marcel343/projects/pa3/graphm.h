@@ -11,6 +11,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <iomanip>
 using namespace std;
 
 const int INF = 1000000000;          // "no edge / unknown distance" sentinel
@@ -40,5 +41,6 @@ private:
     vector<vector<TableType>> pathM;            // pathM[src][v]
     int size = 0;
     // TODO: declare your helpers (path reconstruction wants a recursive one)
+    string pathRecurse(int src, int des) const;
 };
 #endif
