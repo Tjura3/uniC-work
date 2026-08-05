@@ -21,11 +21,11 @@ int GraphM::buildGraph(ifstream& file) {
     adjM.assign(size + 1, vector<int>(size + 1, INF));
     pathM.assign(size + 1, vector<TableType>(size + 1));
 
-    n = 1;
-    getline(file, vertices[n]); //to clear the first line
-    while(n <= size){
-        getline(file, vertices[n]);
-        n++;
+    
+    string clear;
+    getline(file, clear); //to clear the first line
+    for (int i = 1; i <= size; ++i) {
+        getline(file, vertices[i]);
     }
 
     int from = 0;
@@ -36,8 +36,11 @@ int GraphM::buildGraph(ifstream& file) {
         file >> cost;
         insertEdge(from, to, cost);
     }
-    getline(file, vertices[0]); //maybe this is better than using a dummy string? idk.
-    vertices[0] = "";
+    //getline(file, vertices[0]); //maybe this is better than using a dummy string? idk.
+    //vertices[0] = "";
+    //maybe not risk it on a project
+    getline(file, clear); 
+    //something, something, taking up more space because of a string but idk.
     return 1;
 }
 
