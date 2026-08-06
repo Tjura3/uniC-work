@@ -24,6 +24,22 @@ using namespace std;
 void merge(vector<int>& a, int lo, int mid, int hi) {
     // TODO — L13's "merge" slide is this function; a temp buffer and two
     //        walking pointers. Which run wins a tie matters for stability.
+    vector<int> temp;
+    temp.reserve(hi - lo + 1); //reserving memory
+    int i = lo;
+    int j = mid+1;
+    while (i <= mid && j <= hi) {
+        if (a[i] <= a[j]) {
+            temp.push_back(a[i++]);
+        } else {
+            temp.push_back(a[j++]);
+        }
+    }
+    while (i <= mid) temp.push_back(a[i++]);
+    while (j <= hi)  temp.push_back(a[j++]);
+    for (int k = 0; k < temp.size(); k++) {
+        a[lo + k] = temp[k];
+    }
 }
 
 // ---- TODO 2 — mergesort ---------------------------------------------------
@@ -31,6 +47,11 @@ void merge(vector<int>& a, int lo, int mid, int hi) {
 // half, then merge them.
 void mergesort(vector<int>& a, int lo, int hi) {
     // TODO — three lines: base case, split at the midpoint, recurse + merge.
+    if (lo >= hi) return;
+    int mid = lo + (hi - lo) / 2;
+    mergesort(a, lo, mid);
+    mergesort(a, mid + 1, hi);
+    merge(a, lo, mid, hi);
 }
 
 // ---- TODO 3 — partition (Lomuto) ------------------------------------------
@@ -40,7 +61,12 @@ int partition(vector<int>& a, int lo, int hi) {
     // TODO — Lomuto, exactly as traced on the L13 partition slides (pivot =
     //        a[hi], one scanning index). Trace your code on [3 7 1 9 4 8 6 2 5]
     //        and compare with the deck before trusting it.
-    return 0;
+    //return 0;
+    int pivot = a[hi];
+    int i = lo - 1;
+    for (int j = lo; j < hi; j++) if (a[j] < pivot) swap(a[++i], a[j]);
+    swap(a[i + 1], a[hi]);
+    return i + 1;
 }
 
 // ---- TODO 4 — quicksort ----------------------------------------------------
@@ -49,6 +75,10 @@ int partition(vector<int>& a, int lo, int hi) {
 void quicksort(vector<int>& a, int lo, int hi) {
     // TODO — base case, partition, recurse on the two sides (the pivot is
     //        already home).
+    if (hi <= lo) return;
+    int p = partition(a, lo, hi);
+    quicksort(a, lo, p - 1);
+    quicksort(a, p + 1, hi);
 }
 
 // ---- TODO 5 — quickselect --------------------------------------------------
@@ -58,7 +88,12 @@ void quicksort(vector<int>& a, int lo, int hi) {
 int quickselect(vector<int>& a, int lo, int hi, int k) {
     // TODO — one partition tells you the pivot's exact rank; compare it to k.
     //        (L13 "quickselect" slides.)
-    return 0;
+    //return 0;
+    if (lo == hi) return a[lo];
+    int p = partition(a, lo, hi);
+    if (k == p) return a[p];
+    else if (k < p) return quickselect(a, lo, p - 1, k);
+    else return quickselect(a, p + 1, hi, k);
 }
 
 // ==========================================================================
