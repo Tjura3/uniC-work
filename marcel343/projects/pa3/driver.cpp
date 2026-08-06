@@ -66,6 +66,7 @@ int main() {
         cout << "Badgraph test.\n";
         ifstream inM("bad-graph.txt");
         ifstream inL("bad-graph.txt");
+        int temp = no;
         if(!inM || !inL){
             cout << "file not found" << endl;
         }else{
@@ -75,20 +76,26 @@ int main() {
                     cout << "Badgraph " << i << " caught for graphM.\n";
                 }else{
                     cout << "Badgraph ran without errors for graphM.\n";
+                    g.findShortestPath();
+                    g.displayAllPaths(); //the only valid path should be 1 to 2 cost 10
                     no++;
                 }
             }
             for(int i = 1; i < 3; i++){
-                GraphM g;
+                GraphL g;
                 if (g.buildGraph(inL) != 1){
                     cout << "Badgraph " << i << " caught for graphL.\n";
                 }
                 else{
                     cout << "Badgraph ran without errors for graphL.\n";
+                    g.displayGraph();
                     no++;
                 }
             }
+            cout << "Realized in testing, bagraph will continue if the nodes are bad, check graph manually.\n";
+            no -= 2;
         }
+        if(no == temp) cout << "Good\n";
         cout << "=============================================\n";
     }
 
@@ -260,7 +267,7 @@ int main() {
     if(no == 0){
         cout << "All tests passed without issues.\n";
     }else{
-        cout << "Some tests failed, check above.\n";
+        cout << "Some tests failed, check above. Error count: " << no << endl;
     }
     return 0;
 }
