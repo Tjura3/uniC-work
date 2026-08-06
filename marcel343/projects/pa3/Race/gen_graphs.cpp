@@ -38,7 +38,7 @@ WGraph buildWGraph(const string& filename) {
 int main() {
     unsigned s = 343;
     auto rnd = [&]() { s = s * 1103515245u + 12345u; return (s >> 16) % 32768u; };
-    for (int V : {200, 400, 800, 1600}) {
+    for (int V : {200, 400, 800, 1600, 3200}) {
         for (int dense = 0; dense < 2; dense++) {
             ofstream f((dense ? "dense_" : "sparse_") + to_string(V) + ".txt");
             f << V << '\n';
@@ -60,11 +60,11 @@ int main() {
     }
 
     //race
-    cout << "\n=========================================================\n";
-    cout << "Type\t\tV\tGraphM (ms)\tHeap Dijkstra (ms)\n";
+    cout << "\n=====================================================\n";
+    cout << "Type\t\tV\tGraphM (ms)\t  09 Dijkstra (ms)\n";
     cout << "=========================================================\n";
 
-    for (int V : {200, 400, 800, 1600}) {
+    for (int V : {200, 400, 800, 1600, 3200}) {
         for (int i = 0; i < 2; i++) {
             string filename = (i ? "dense_" : "sparse_") + to_string(V) + ".txt";
             
@@ -78,22 +78,20 @@ int main() {
             auto endM = high_resolution_clock::now();
             double timeM = duration<double, milli>(endM - startM).count();
 
-            // --- Benchmark ICA 09 (Heap Dijkstra looped over all V sources) ---
+            //ICA09 benchmark
             WGraph gW = buildWGraph(filename);
-
-            auto startHeap = high_resolution_clock::now();
-            for (int src = 1; src <= V; ++src) {
+            auto startH = high_resolution_clock::now();
+            for (int src = 1; src <= V; src++) {
                 dijkstra(gW, src);
             }
-            auto endHeap = high_resolution_clock::now();
-            double timeHeap = duration<double, milli>(endHeap - startHeap).count();
+            auto endH = high_resolution_clock::now();
+            double timeH = duration<double, milli>(endH - startH).count();
 
-            // --- Print Results ---
             cout << (i ? "Dense\t\t" : "Sparse\t\t")
-                 << V << "\t" << timeM << " ms\t\t" << timeHeap << " ms\n";
+                 << V << "\t" << timeM << " ms\t\t" << timeH << " ms\n";
         }
     }
-    cout << "=========================================================\n";
+    cout << "=============================================\n";
 
 
 

@@ -1,4 +1,4 @@
-//Thomas Juranich
+//Thomas Juranich, edited for race
 // CSS 343 · ICA 09 — Dijkstra's shortest paths.  Fill in the TODO, then run.
 //
 //   build:        g++ -std=c++17 -g -o ica09 ica09.cpp
@@ -17,7 +17,7 @@
 #include <string>
 using namespace std;
 
-const long INF = LONG_MAX;
+const long OG_INF = LONG_MAX;
 
 struct WGraph {
     int V;                                  // number of vertices
@@ -105,7 +105,7 @@ int main() {
         g.addEdge(1, 2, 1);
         // vertex 3 has no incoming edge — unreachable from 0
         vector<long> d = dijkstra(g, 0);
-        check(d.size() == 4 && d[3] == INF, "dist[3] == INF (no path reaches vertex 3)");
+        check(d.size() == 4 && d[3] == OG_INF, "dist[3] == INF (no path reaches vertex 3)");
     }
 
     cout << "T4 · a larger graph with hand-computed distances (6 vertices)\n";
