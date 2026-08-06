@@ -2,7 +2,7 @@
 // (which holds TWO graphs — your buildGraph must leave the stream positioned
 // for the next one). Its output must match expected-output.txt EXACTLY:
 //
-//   g++ -std=c++17 -g graphm.cpp graphl.cpp sample_driver.cpp -o pa3
+//   g++ -std=c++17 -g graphm.cpp graphl.cpp driver.cpp -o pa3
 //   ./pa3 > myoutput.txt && diff myoutput.txt expected-output.txt
 //   valgrind --leak-check=full ./pa3        (on the CSS lab; GraphL owns heap!)
 //
