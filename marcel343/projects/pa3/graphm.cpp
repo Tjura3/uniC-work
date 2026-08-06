@@ -150,6 +150,7 @@ void GraphM::displayAllPaths() const {
             }
         }
     }
+    cout << endl;
 }
 
 void GraphM::pathRecurseNames(int src, int des) const{
