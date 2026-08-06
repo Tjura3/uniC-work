@@ -75,7 +75,7 @@ string GraphL::edgeList(int nodeId) const {
     if(nodeId < 1 || nodeId > size) return "";
     string res = ""; //result
     EdgeNode* curr = nodeArray[nodeId].edgeHead;
-    bool first = true;
+    bool first = true; 
     while(curr != nullptr){
         if(!first){
             res += " ";
@@ -109,12 +109,70 @@ string GraphL::DFSorder(int start) {
     // TODO: ITERATIVE with an explicit stack — push start; pop u (skip if
     //       visited), visit it, push u's neighbors in list order. Recursion
     //       is not accepted here.
-    (void)start;
-    return "";
+    //(void)start;
+    //return "";
+    if(start < 1 || start > size || nodeArray == nullptr) return "";
+    clearVisited();
+
+    string res = "";
+    stack<int> s;
+    s.push(start);
+    bool first = true;
+    while(!s.empty()){
+        int u = s.top();
+        s.pop();
+        if(nodeArray[u].visited) continue;
+        nodeArray[u].visited = true;
+        if(!first){
+            res += " ";
+        }
+        res += to_string(u);
+        first = false;
+
+        EdgeNode* curr = nodeArray[u].edgeHead;
+        while(curr != nullptr){
+            if(!nodeArray[curr->adjGraphNode].visited){
+                s.push(curr->adjGraphNode);
+            }
+            curr = curr->nextEdge;
+        }
+    }
+    return res;
 }
 
 string GraphL::BFSorder(int start) {
     // TODO: queue; mark visited when you ENQUEUE (not dequeue).
-    (void)start;
-    return "";
+    //(void)start;
+    //return "";
+    if(start < 1 || start > size || nodeArray == nullptr) return "";
+    clearVisited();
+
+    string res = "";
+    queue<int> q;
+    q.push(start);
+    nodeArray[start].visited = true;
+    bool first = true;
+    while(!q.empty()){
+        int u = q.front();
+        q.pop();
+
+        
+        
+        if(!first){
+            res += " ";
+        }
+        res += to_string(u);
+        first = false;
+
+        EdgeNode* curr = nodeArray[u].edgeHead;
+        while(curr != nullptr){ //push each edge into the q
+            int adj = curr->adjGraphNode;
+            if(!nodeArray[adj].visited){
+                nodeArray[adj].visited = true;
+                q.push(adj);
+            }
+            curr = curr->nextEdge;
+        }
+    }
+    return res;
 }

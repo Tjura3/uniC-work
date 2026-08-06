@@ -21,7 +21,6 @@ int GraphM::buildGraph(ifstream& file) {
     adjM.assign(size + 1, vector<int>(size + 1, INF));
     pathM.assign(size + 1, vector<TableType>(size + 1));
 
-    
     string clear;
     getline(file, clear); //to clear the first line
     for (int i = 1; i <= size; ++i) {
@@ -58,7 +57,7 @@ int GraphM::removeEdge(int from, int to) {
     if(from < 1 || from > size || to < 1 || to > size) return -1;
     adjM[from][to] = INF;
 
-    return -1;
+    return 1;
 }
 
 void GraphM::findShortestPath() {
@@ -167,6 +166,7 @@ void GraphM::displayPath(int src, int dest) const {
     // TODO: the same one-line format, then each path vertex's NAME on its own
     //       line, then a blank line (see expected-output.txt)
     //(void)src; (void)dest;
+    if(src < 1 || src > size || dest < 1 || dest > size) return;
     cout << "    " << right << setw(3) << src << setw(5) << dest;
     if(pathM[src][dest].dist == INF){
         cout << setw(10) << "---" << endl;
