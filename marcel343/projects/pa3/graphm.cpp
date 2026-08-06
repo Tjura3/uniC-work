@@ -56,7 +56,6 @@ int GraphM::removeEdge(int from, int to) {
     // TODO: validate; reset the cell to INF
     if(from < 1 || from > size || to < 1 || to > size) return -1;
     adjM[from][to] = INF;
-
     return 1;
 }
 
