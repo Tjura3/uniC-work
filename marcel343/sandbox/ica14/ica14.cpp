@@ -137,7 +137,8 @@ int lcs(const string& a, const string& b) {
 vector<int> rodCutPieces(const vector<int>& price, int n) {
     // TODO — fill best[] as in rodCut, recording cut[] alongside it, then walk
     //        cut[] back from n. Return an empty vector when n == 0.
-    return {};
+    //return {};
+    
 }
 
 // ---- EC 2 (+3) — lcsString: the subsequence, not just its length ----------
