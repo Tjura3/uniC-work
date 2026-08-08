@@ -1,3 +1,4 @@
+//Thomas Juranich
 // CSS 343 · ICA 14 — dynamic programming I.  Fill in the TODOs, then run the application.
 //
 //   build:        g++ -std=c++17 -g -o ica14 ica14.cpp
@@ -55,7 +56,7 @@ long fibTab(int n) {
     //return 0;
     if(n <= 0) return 0;
     if(n == 1) return 1;
-    //vector<long> tab(n+2); //why n+2? why not n+1 so it's 1 indexed thus holding n?
+    //vector<long> tab(n+2); //why n+2? why not n+1 so it's 1 indexed thus holding n? nevermind, it was just how it was built in the advanced lecture.
     vector<long> tab(n+1);
     tab[0] = 0;
     tab[1] = 1;
@@ -138,6 +139,27 @@ vector<int> rodCutPieces(const vector<int>& price, int n) {
     // TODO — fill best[] as in rodCut, recording cut[] alongside it, then walk
     //        cut[] back from n. Return an empty vector when n == 0.
     //return {};
+    //overall, returning the amount of cuts and size.
+    if (n == 0) return {};
+    vector<int> best(n+1, 0);
+    vector<int> cut(n+1, 0);
+    for(int i = 1; i <= n; i++){
+        int mval = 0;
+        for(int j = 1; j <= i; j++){
+            int curr = price[j] + best[i-j];
+            if(curr > mval){
+                mval = curr;
+                cut[i] = j;
+            }
+        }
+        best[i] = mval;
+    }
+    vector<int> res;
+    while(n > 0){
+        res.push_back(cut[n]);
+        n -= cut[n];
+    }
+    return res;
     
 }
 
@@ -152,7 +174,36 @@ vector<int> rodCutPieces(const vector<int>& price, int n) {
 // See L14 "LCS — reconstructing the string" and the ?ds=lcs-tree green chain.
 string lcsString(const string& a, const string& b) {
     // TODO — build the table, then trace back from the bottom-right corner.
-    return "";
+    //return "";
+    int m = a.size();
+    int n = b.size();
+    vector<vector<int>> L(m+1, vector<int>(n+1, 0));
+    for(int i = 1; i <= m; i++){
+        for(int j = 1; j <= n; j++){
+            if(a[i-1] == b[j-1]){
+                L[i][j] = L[i-1][j-1] + 1;  
+            }else{
+                L[i][j] = max(L[i-1][j], L[i][j-1]);
+            }
+        }
+    }
+    
+    //collecting the match
+    string res = "";
+    int i = m;
+    int j = n;
+    while(i > 0 && j > 0){
+        if(a[i-1] == b[j-1]){
+            res.push_back(a[i-1]);
+            i--;
+            j--;
+        }else if(L[i-1][j] >= L[i][j-1]){
+            i--;
+        }else j--;
+    }
+    //and reverse them
+    reverse(res.begin(), res.end());
+    return res;
 }
 
 // ---- EC 3 (+4) — lcsLengthTwoRows: the same answer in O(min(m,n)) space ---
@@ -166,7 +217,28 @@ string lcsString(const string& a, const string& b) {
 // would need have been overwritten.
 int lcsLengthTwoRows(const string& a, const string& b) {
     // TODO — two vectors (prev, cur), the same recurrence, swapped each row.
-    return 0;
+    //return 0;
+    //im so tired after working, im just done...
+    //it was a mistake to do the EC assignments pushing myself when im just this exhausted but I like the safty net
+    if(a.size() < b.size()){
+        return lcsLengthTwoRows(b,a);
+    }
+    int m = a.size();
+    int n = b.size();
+    vector<int> prev(n+1, 0);
+    vector<int> curr(n+1, 0);
+    for(int i = 1; i <= m; i++){
+        for(int j = 1; j <= n; j++){
+            if(a[i-1] == b[j-1]){
+                curr[j] = prev[j-1] + 1;
+            }else{
+                curr[j] = max(prev[j], curr[j-1]);
+            }
+        }
+        prev = curr;
+    }
+    //finally
+    return prev[n];
 }
 
 // ==========================================================================
