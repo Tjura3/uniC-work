@@ -29,18 +29,19 @@ int knapsack(const vector<int>& value, const vector<int>& weight, int W) {
     //        (the deck flags this exact off-by-one).
     //return 0;
     //tabulated, W = capacity
-    vector<vector<int>> k(weight.size()+1, vector<int>(W+1, 0));
-    for(int i = 1; i < k.size(); i++){
-        for(int w = 1; w < k[i].size(); w++){
+    vector<vector<int>> K(weight.size()+1, vector<int>(W+1, 0));
+    for(int i = 1; i < K.size(); i++){
+        for(int w = 1; w < K[i].size(); w++){
             //k[i][w] = k[i-1][w];
-            if(weight[i] <= w){
-                k[i][w] = max(k[i-1][w], value[i] + k[i-1][w-weight[i]]);
+            //i-1 because weight isn't 1 indexed
+            if(weight[i-1] <= w){
+                K[i][w] = max(K[i-1][w], value[i-1] + K[i-1][w-weight[i-1]]);
             }else{
-                k[i][w] = k[i-1][w];
+                K[i][w] = K[i-1][w];
             }
         }
     }
-    return k[value.size()][W];
+    return K[value.size()][W];
 }
 
 // ---- TODO 2 — editDistance -------------------------------------------------
@@ -58,7 +59,21 @@ int knapsack(const vector<int>& value, const vector<int>& weight, int W) {
 int editDistance(const string& a, const string& b) {
     // TODO — base cases first (they are NOT all zero here), then the fill.
     //return 0;
-    
+    int m = a.size();
+    int n = b.size();
+    vector<vector<int>> D(m+1, vector<int>(n+1, 0));
+    for(int i = 0; i <= m; i++) D[i][0] = i;
+    for(int j = 0; j <= n; j++) D[0][j] = j;
+    for(int i = 1; i <= m; i++){
+        for(int j = 1; j <= n; j++){
+            if(a[i-1] == b[j-1]){
+                D[i][j] = D[i-1][j-1];
+            }else{
+                D[i][j] = 1 + min({D[i-1][j], D[i][j-1], D[i-1][j-1]});
+            }
+        }
+    }
+    return D[m][n];
 }
 
 // ---- TODO 3 — knapsackItems (traceback) -----------------------------------
@@ -71,7 +86,32 @@ int editDistance(const string& a, const string& b) {
 vector<int> knapsackItems(const vector<int>& value, const vector<int>& weight, int W) {
     // TODO — rebuild K, then the backward walk from the header (L15's
     //        "traceback" slide works the exact move).
-    return {};
+    //return {};
+    int n = value.size();
+    vector<vector<int>> K(n+1, vector<int>(W+1, 0));
+    //taken from knapsack
+    for(int i = 1; i < K.size(); i++){
+        for(int w = 1; w < K[i].size(); w++){
+            //k[i][w] = k[i-1][w];
+            //i-1 because weight isn't 1 indexed
+            if(weight[i-1] <= w){
+                K[i][w] = max(K[i-1][w], value[i-1] + K[i-1][w-weight[i-1]]);
+            }else{
+                K[i][w] = K[i-1][w];
+            }
+        }
+    }
+    //table constructed
+    vector<int> taken;
+    int w = W;
+    for(int i = n; i >= 1; i--){
+        if(K[i][w] != K[i-1][w]){
+            taken.push_back(i-1);
+            w -= weight[i-1];
+        }
+    }
+    reverse(taken.begin(), taken.end());
+    return taken;
 }
 
 // ==========================================================================
@@ -99,7 +139,50 @@ vector<int> knapsackItems(const vector<int>& value, const vector<int>& weight, i
 vector<char> editOps(const string& a, const string& b) {
     // TODO — build D as in TODO 2, then the backward walk above. Push one
     //        char per step, reverse, return.
-    return {};
+    //return {};
+    int m = a.size();
+    int n = b.size();
+    vector<vector<int>> D(m+1, vector<int>(n+1, 0));
+    for(int i = 0; i <= m; i++) D[i][0] = i;
+    for(int j = 0; j <= n; j++) D[0][j] = j;
+    for(int i = 1; i <= m; i++){
+        for(int j = 1; j <= n; j++){
+            if(a[i-1] == b[j-1]){
+                D[i][j] = D[i-1][j-1];
+            }else{
+                D[i][j] = 1 + min({D[i-1][j], D[i][j-1], D[i-1][j-1]});
+            }
+        }
+    }
+    
+    vector<char> ops;
+    int i = m;
+    int j = n;
+    while(i > 0 || j > 0){
+        if(i == 0){
+            ops.push_back('I');
+            j--;
+        }else if(j == 0){
+            ops.push_back('D');
+            i--;
+        }else if(a[i-1] == b[j-1]){
+            ops.push_back('M');
+            i--;
+            j--;
+        }else if(D[i][j] == D[i-1][j-1]+1){
+            ops.push_back('R');
+            i--;
+            j--;
+        }else if(D[i][j] == D[i-1][j]+1){
+            ops.push_back('D');
+            i--;
+        }else if(D[i][j] == D[i][j-1]+1){
+            ops.push_back('I');
+            j--;
+        }
+    }
+    reverse(ops.begin(), ops.end());
+    return ops;
 }
 
 // ==========================================================================
