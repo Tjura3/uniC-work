@@ -43,6 +43,15 @@ int bruteForce(const string& text, const string& pat) {
 void insert(TrieNode* root, const string& key) {
     // TODO — a walk that creates what's missing; the header says what to mark
     //        at the end. (L16 "trie insert".)
+    //if(root == nullptr) root = new TrieNode
+    TrieNode* curr = root;
+    for(char c : key){
+        if(!curr->next[c - 'a']){
+            curr->next[c - 'a'] = new TrieNode();
+        }
+        curr = curr->next[c - 'a'];
+    }
+    curr->isWord = true;
 }
 
 // ---- TODO 2 — search --------------------------------------------------------
@@ -51,7 +60,15 @@ void insert(TrieNode* root, const string& key) {
 bool search(TrieNode* root, const string& key) {
     // TODO — walk the path; remember the deck's warning: a reachable path is
     //        NOT the same as a stored word.
-    return false;
+    //return false;
+    TrieNode* curr = root;
+    for(char c : key){
+        if(!curr->next[c - 'a']){
+            return false;
+        }
+        curr = curr->next[c - 'a'];
+    }
+    return curr->isWord;
 }
 
 // ---- TODO 3 — startsWith ----------------------------------------------------
@@ -59,7 +76,15 @@ bool search(TrieNode* root, const string& key) {
 // regardless of isWord (unlike search, a prefix need not itself be a word).
 bool startsWith(TrieNode* root, const string& prefix) {
     // TODO — one line different from search. Which line, and why?
-    return false;
+    //return false;
+    TrieNode* curr = root;
+    for(char c : prefix){
+        if(!curr->next[c - 'a']){
+            return false;
+        }
+        curr = curr->next[c - 'a'];
+    }
+    return true;
 }
 
 // ---- TODO 4 — failure -------------------------------------------------------
