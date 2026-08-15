@@ -95,7 +95,16 @@ vector<int> failure(const string& p) {
     //        does: the pattern matched against itself, falling back through
     //        the part of the table already built. Hand-check on AABAA (the
     //        deck's worked table) before trusting it.
-    return {};
+    //return {};
+    int m = p.size();
+    vector<int> fail(m, 0);
+    int k = 0;
+    for(int j = 1; j < m; j++){
+        while(k > 0 && p[j] != p[k]) k = fail[k-1];
+        if(p[j] == p[k]) k++;
+        fail[j] = k;
+    }
+    return fail;
 }
 
 // ---- TODO 5 — kmp -----------------------------------------------------------
@@ -106,6 +115,14 @@ int kmp(const string& text, const string& pat) {
     //        builder loop (empty pattern: a match at 0). Write the real thing —
     //        delegating to string::find or the given bruteForce forfeits the
     //        KMP points (checked by eye at grading).
+    //return -1;
+    vector<int> fail = failure(pat);
+    int j = 0;
+    for(int i = 0; i < (int)text.size(); i++){
+        while(j > 0 && text[i] != pat[j]) j = fail[j-1]; //falling back to what we know is ok
+        if(text[i] == pat[j]) j++; //extending what we know is cool
+        if(j == (int)pat.size()) return i - j + 1; //returning the start of the match
+    }
     return -1;
 }
 
@@ -129,9 +146,31 @@ int kmp(const string& text, const string& pat) {
 //                                   ""   -> all four        "xyz" -> {}
 // Recursion wants a helper — write one above this function. This only READS
 // the trie: allocate nothing here and there is nothing to free.
+void recurse(TrieNode* curr, string s, vector<string>& k){
+    //if(!curr) return;
+    if(curr->isWord){
+        k.push_back(s);
+    }
+    for(int i = 0; i < 26; i++){
+        if(curr->next[i]){
+            recurse(curr->next[i], s+static_cast<char>('a' + i), k);
+        }
+        //recurse(curr->next[i], s+static_cast<char>('a' + i), k);
+    }
+}
 vector<string> keysWithPrefix(TrieNode* root, const string& prefix) {
     // TODO — walk to the prefix node, then collect the subtree's words.
-    return {};
+    //return {};
+    TrieNode* curr = root;
+    for(char c : prefix){
+        if(!curr->next[c - 'a']){
+            return {};
+        }
+        curr = curr->next[c - 'a'];
+    }
+    vector<string> kwp;
+    recurse(curr, prefix, kwp);
+    return kwp;
 }
 
 // ==========================================================================
