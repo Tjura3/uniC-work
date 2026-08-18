@@ -114,8 +114,24 @@ string unifiedDiff(const vector<string>& a, const vector<string>& b, int context
     //       Check yourself against expected-unified.txt.
     //(void)a; (void)b; (void)context;
     //return "";
-    vector<Edit> escript = diffLines(a, b);
-    
+    //To check if there has been changes or not, check for ' '
+    vector<Edit> scrip = diffLines(a, b); //escript or edit script
+    vector<int> change;
+    for(int i = 0; i < scrip.size(); i++){
+        if(scrip[i].op != ' ') change.push_back(i);
+    }
+    if(change.empty()) return "";
+
+    int N = scrip.size();
+    vector<int> al(N+1, 0);
+    vector<int> bl(N+1, 0);
+    int acur = 1;
+    int bcur = 1;
+    for(int i = 1; i < N; i++){
+        al[i] = acur;
+        bl[i] = bcur;
+        
+    }
     
 }
 
