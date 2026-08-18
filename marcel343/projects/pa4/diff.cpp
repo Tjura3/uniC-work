@@ -51,17 +51,60 @@ vector<Edit> diffLines(const vector<string>& a, const vector<string>& b) {
     //return {};
     int m = a.size();
     int n = b.size();
-    //trim
-    int st = 0;
-    while(st < m && st < n && a[st] == b[st]){
-        st++;
+    //strip
+    int start = 0;
+    while(start < m && start < n && a[start] == b[start]){
+        start++;
     }
     int enda = m-1;
     int endb = n-1;
-    while(enda >= st && endb >= st && a[enda] == b[endb]){
+    while(enda >= start && endb >= start && a[enda] == b[endb]){
         enda--;
         endb--;
     }
+    //LCA table
+    vector<string> atrim(a.begin()+start, a.begin() + enda + 1);
+    vector<string> btrim(b.begin()+start, b.begin() + endb + 1);
+    int mt = atrim.size();
+    int nt = btrim.size();
+    vector<vector<int>> L(mt+1, vector<int>(nt+1 , 0));
+    for(int i = 1; i <= mt; i++){
+        for(int j = 1; j <= nt; j++){
+            if(atrim[i-1] == btrim[j-1]){
+                L[i][j] = L[i-1][j-1] + 1;
+            }else{
+                L[i][j] = max(L[i-1][j], L[i][j-1]);
+            }
+        }
+    }
+    //traceback to result, or edit script
+    vector<Edit> tedit;
+    int i = mt;
+    int j = nt;
+    while(i > 0 || j > 0){
+        if(i > 0 && j > 0 && (atrim[i-1] == btrim[j-1])){
+            tedit.push_back({' ', atrim[i-1]});
+            i--;
+            j--;
+        }else if(i > 0 && (j==0 || L[i-1][j] > L[i][j-1])){
+            tedit.push_back({'-', atrim[i-1]});
+            i--;
+        }else{
+            tedit.push_back({'+', btrim[j-1]});
+            j--;
+        }
+    }
+    reverse(tedit.begin(), tedit.end());
+    vector<Edit> res;
+    for(int k = 0; k < start; k++){
+        res.push_back({' ', a[k]});
+    }
+    res.insert(res.end(), tedit.begin(), tedit.end());
+
+    for(int k = enda + 1; k < m; k++){
+        res.push_back({' ', a[k]});
+    }
+    return res;
 }
 
 string unifiedDiff(const vector<string>& a, const vector<string>& b, int context) {
@@ -69,8 +112,11 @@ string unifiedDiff(const vector<string>& a, const vector<string>& b, int context
     //       common lines on each side — headed "@@ -start,count +start,count @@".
     //       Prefix each body line with ' ', '-' or '+'. "" if identical.
     //       Check yourself against expected-unified.txt.
-    (void)a; (void)b; (void)context;
-    return "";
+    //(void)a; (void)b; (void)context;
+    //return "";
+    vector<Edit> escript = diffLines(a, b);
+    
+    
 }
 
 string markLine(const string& a, const string& b) {
