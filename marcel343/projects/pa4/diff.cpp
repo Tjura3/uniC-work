@@ -176,6 +176,63 @@ string markLine(const string& a, const string& b) {
     // TODO: the SAME DP one level down — characters instead of lines. Render
     //       the traceback as wdiff markup: [-deleted-] and {+inserted+},
     //       merging consecutive same-op characters into one bracket pair.
-    (void)a; (void)b;
-    return "";
+    //(void)a; (void)b;
+    //return "";
+    int m = a.size();
+    int n = b.size();
+
+    vector<vector<int>> L(m+1, vector<int>(n+1, 0));
+    for(int i = 1; i <= m; i++){
+        for(int j = 1; j <= n; j++){
+            if(a[i-1] == b[j-1]){
+                L[i][j] = L[i-1][j-1] + 1;
+            }else{
+                L[i][j] = max(L[i-1][j], L[i][j-1]);
+            }
+        }
+    }
+
+    vector<Edit> tedit;
+    int i = m;
+    int j = n;
+    while (i > 0 || j > 0) {
+        if (i > 0 && j > 0 && a[i-1] == b[j-1]) {
+            tedit.push_back({' ', string(1, a[i-1])});
+            i--;
+            j--;
+        } else if (i > 0 && (j == 0 || L[i-1][j] > L[i][j-1])) {
+            tedit.push_back({'-', string(1, a[i-1])});
+            i--;
+        } else {
+            tedit.push_back({'+', string(1, b[j-1])});
+            j--;
+        }
+    }
+
+    reverse(tedit.begin(), tedit.end());
+    ostringstream os;
+    int k = 0;
+    int sz = tedit.size();
+    while(k < sz){
+        if(tedit[k].op == ' '){
+            os << tedit[k].line;
+            k++;
+        }else if(tedit[k].op == '-'){
+            os << "[-";
+            while (k < sz && tedit[k].op == '-'){
+                os << tedit[k].line;
+                k++;
+            }
+            os << "-]";
+        }else{
+            os << "{+";
+            while (k < sz && tedit[k].op == '+') {
+                os << tedit[k].line;
+                k++;
+            }
+            os << "+}";
+        }
+    }
+    return os.str();
+
 }
