@@ -3,6 +3,7 @@
 // thinking — the DP is the same, the keys change (lines instead of chars).
 #include "diff.h"
 #include <algorithm>
+#include <sstream>
 
 // ---- GIVEN — read a stream into lines (do not change) ----------------------
 vector<string> fileLines(istream& in) {
