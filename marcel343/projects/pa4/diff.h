@@ -11,6 +11,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <sstream> //including this to make sting manipulation easier,
+//could use normal operations, but I wnat to use this to make thigns easier.
 using namespace std;
 
 struct Edit {

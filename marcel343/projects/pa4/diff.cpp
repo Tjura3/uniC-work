@@ -127,12 +127,49 @@ string unifiedDiff(const vector<string>& a, const vector<string>& b, int context
     vector<int> bl(N+1, 0);
     int acur = 1;
     int bcur = 1;
-    for(int i = 1; i < N; i++){
+    for(int i = 0; i < N; i++){
         al[i] = acur;
         bl[i] = bcur;
-        
+        if(scrip[i].op == ' ' || scrip[i].op == '-') acur++;
+        if(scrip[i].op == ' ' || scrip[i].op == '+') bcur++;
     }
-    
+    al[N] = acur;
+    bl[N] = bcur;
+
+    //Seperating it as if I were looking in source tree basically
+    ostringstream os;
+    int i = 0;
+    //if the distance between the different chunks are more than 2,
+    //add them together
+    while(i < change.size()){
+        int first = change[i];
+        int last = change[i];
+        while(i + 1 < change.size() && change[i+1] - last <= 2 * context + 1){
+            i++;
+            last = change[i];
+        }
+        i++;
+
+        int start = (first > context) ? first-context : 0;
+        int end = min(N-1, last+context);
+        int counta = 0;
+        int countb = 0;
+        for(int k = start; k <= end; k++){
+            if(scrip[k].op == ' ' || scrip[k].op == '-') counta++;
+            if(scrip[k].op == ' ' || scrip[k].op == '+') countb++;
+        }
+        int starta = (counta == 0) ? al[start] -1 : al[start];
+        int startb = (countb == 0) ? bl[start] -1 : bl[start];
+
+        os << "@@ -" << starta << "," << counta << " +" << startb << "," 
+        << countb << " @@\n";
+
+        for(int k = start; k <= end; k++){
+            os << scrip[k].op << scrip[k].line << "\n"; //endl; not endl, that breaks sstream
+        }
+    }
+
+    return os.str();
 }
 
 string markLine(const string& a, const string& b) {
