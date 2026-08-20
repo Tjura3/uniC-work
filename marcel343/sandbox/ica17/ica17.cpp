@@ -35,7 +35,21 @@ set<int> epsClosure(const NFA& nfa, const set<int>& states) {
     // TODO — a DFS/BFS over nfa.eps, exactly like L08's graph reachability
     //        (L17 traces it on the A*B machine). One classic bug to avoid:
     //        expanding a state you've already expanded.
-    return {};
+    //return {};
+    set<int> clo = states;
+    vector<int> stk(states.begin(), states.end());
+
+    while(!stk.empty()){
+        int u = stk.back();
+        stk.pop_back();
+
+        for(int v : nfa.eps[u]){
+            if (clo.insert(v).second) {
+                stk.push_back(v);
+            }
+        }
+    }
+    return clo;
 }
 
 // ---- TODO 2 — simulate -----------------------------------------------------
@@ -48,7 +62,18 @@ bool simulate(const NFA& nfa, const string& text) {
     //       build the set of s+1 for every s in `active` with nfa.match[s]==c,
     //       then reassign active = epsClosure(nfa, that set). After all
     //       chars, return whether active contains the accept state (n-1).
-    return false;
+    //return false;
+    set<int> act = epsClosure(nfa, {0});
+    for (char c : text){
+        set<int> next;
+        for(int s : act){
+            if (s < nfa.n && nfa.match[s] == c){
+                next.insert(s+1);
+            }
+        }
+        act = epsClosure(nfa, next);
+    }
+    return act.count(nfa.n - 1) > 0;
 }
 
 // ==========================================================================
@@ -144,11 +169,44 @@ NFA buildExample2() {
 // Feed the result to YOUR simulate() — that is what the tests below do.
 NFA buildNFA(const string& re) {
     // TODO — the wrap, then one left-to-right pass with a stack of positions.
-    (void)re;
+    //(void)re;
     NFA nfa;                       // an empty but WELL-FORMED machine, so the
-    nfa.n = 1;                     // EC tests below can run (and fail) safely
-    nfa.eps.assign(1, {});         // while this TODO is unwritten
+    nfa.n = re.size()+1;                     // EC tests below can run (and fail) safely
+    nfa.eps.assign(nfa.n, {});         // while this TODO is unwritten
     for (int i = 0; i < MAX; i++) nfa.match[i] = 0;
+    //return nfa;
+    vector<int> op;
+    for(int i = 0; i < re.size(); i++){
+        int lp = i;
+
+        if(re[i] == '(' || re[i] == '|'){
+            op.push_back(i);
+        }else if(re[i] == ')'){
+            vector<int> orpos;
+            while(!op.empty() && re[op.back()] == '|'){
+                orpos.push_back(op.back());
+                op.pop_back();
+            }
+            if (!op.empty() && re[op.back()] == '('){
+                lp = op.back();
+                op.pop_back();
+            }
+            for(int orp : orpos){
+                nfa.eps[lp].push_back(orp + 1);
+                nfa.eps[orp].push_back(i);
+            }
+        }
+        if(i + 1 < re.size() && re[i+1] == '*'){
+            nfa.eps[lp].push_back(i + 1);
+            nfa.eps[i+1].push_back(lp);
+        }
+
+        if (re[i] == '(' || re[i] == ')' || re[i] == '*') {
+            nfa.eps[i].push_back(i + 1);
+        } else if (re[i] != '|') {
+            nfa.match[i] = re[i];
+        }
+    }
     return nfa;
 }
 
